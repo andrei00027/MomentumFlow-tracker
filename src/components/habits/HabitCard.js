@@ -4,14 +4,24 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Colors, Sizes } from '@/src/constants';
 
-export const HabitCard = ({ habit, onComplete, isCompleted }) => {
+export const HabitCard = ({ habit, onComplete, isCompleted, onLongPress }) => {
   const handlePress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onComplete(habit.id);
   };
 
+  const handleLongPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    onLongPress?.(habit);
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onLongPress={handleLongPress}
+      activeOpacity={0.8}
+      delayLongPress={500}
+    >
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.icon}>{habit.icon || '✨'}</Text>
@@ -31,7 +41,7 @@ export const HabitCard = ({ habit, onComplete, isCompleted }) => {
       >
         {isCompleted && <Text style={styles.checkmark}>✓</Text>}
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

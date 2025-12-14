@@ -153,6 +153,13 @@ export const HabitsProvider = ({ children }) => {
     return habit.completionHistory[today]?.completed || false;
   };
 
+  // Перезагрузить привычки (полезно после очистки данных)
+  const reloadHabits = async () => {
+    setIsLoaded(false);
+    setHabits([]); // Сначала очистить текущие привычки
+    await loadHabitsFromStorage();
+  };
+
   const value = {
     habits,
     addHabit,
@@ -161,6 +168,7 @@ export const HabitsProvider = ({ children }) => {
     completeHabit,
     uncompleteHabit,
     isCompletedToday,
+    reloadHabits,
   };
 
   return (

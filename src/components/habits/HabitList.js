@@ -1,10 +1,20 @@
 // src/components/habits/HabitList.js
-import React from 'react';
-import { FlatList, StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { HabitCard } from './HabitCard';
 import { Colors, Sizes } from '@/src/constants';
 
-export const HabitList = ({ habits, onComplete, isCompletedToday }) => {
+export const HabitList = ({ habits, onComplete, isCompletedToday, onLongPress, onRefresh }) => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (onRefresh) {
+      await onRefresh();
+    }
+    setRefreshing(false);
+  };
+
   if (habits.length === 0) {
     return (
       <View style={styles.emptyContainer}>
@@ -24,10 +34,19 @@ export const HabitList = ({ habits, onComplete, isCompletedToday }) => {
           habit={item}
           onComplete={onComplete}
           isCompleted={isCompletedToday(item.id)}
+          onLongPress={onLongPress}
         />
       )}
       contentContainerStyle={styles.listContainer}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={Colors.primary}
+          colors={[Colors.primary]}
+        />
+      }
     />
   );
 };
