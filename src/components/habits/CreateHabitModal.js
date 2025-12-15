@@ -9,26 +9,70 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Switch,
+  ScrollView,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Haptics from 'expo-haptics';
 import { Colors, Sizes } from '@/src/constants';
 
 const EMOJI_OPTIONS = ['🧘', '💧', '💪', '📚', '🏃', '🎯', '🌱', '✨', '🎨', '🎵', '🍎', '😴'];
 
 export const CreateHabitModal = ({ visible, onClose, onSubmit }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('✨');
+  const [reminderEnabled, setReminderEnabled] = useState(false);
+  const [reminderTime, setReminderTime] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   const handleSubmit = () => {
     if (name.trim()) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       onSubmit({
         name: name.trim(),
         icon: selectedEmoji,
         type: 'binary',
+        reminderEnabled,
+        reminderTime: reminderEnabled ? reminderTime.toISOString() : null,
       });
       // Сбросить форму
       setName('');
       setSelectedEmoji('✨');
+      setReminderEnabled(false);
+      setReminderTime(new Date());
     }
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedEmoji(emoji);
+  };
+
+  const handleClose = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onClose();
+  };
+
+  const handleTimePickerOpen = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShowTimePicker(true);
+  };
+
+  const handleTimeChange = (event, selectedTime) => {
+    if (Platform.OS === 'android') {
+      setShowTimePicker(false);
+    }
+    if (selectedTime) {
+      setReminderTime(selectedTime);
+    }
+  };
+
+  const formatTime = (date) => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
   };
 
   return (
@@ -43,40 +87,75 @@ export const CreateHabitModal = ({ visible, onClose, onSubmit }) => {
         style={styles.overlay}
       >
         <View style={styles.modal}>
-          <Text style={styles.title}>Новая привычка</Text>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Text style={styles.title}>{t('habits.newHabit')}</Text>
 
-          <Text style={styles.label}>Название</Text>
-          <TextInput
-            style={styles.input}
-            value={name}
-            onChangeText={setName}
-            placeholder="Например: Утренняя пробежка"
-            placeholderTextColor={Colors.textDisabled}
-            autoFocus
-          />
+            <Text style={styles.label}>{t('habits.name')}</Text>
+            <TextInput
+              style={styles.input}
+              value={name}
+              onChangeText={setName}
+              placeholder={t('habits.namePlaceholder')}
+              placeholderTextColor={Colors.textDisabled}
+              autoFocus
+            />
 
-          <Text style={styles.label}>Выберите иконку</Text>
-          <View style={styles.emojiGrid}>
-            {EMOJI_OPTIONS.map((emoji) => (
-              <TouchableOpacity
-                key={emoji}
-                style={[
-                  styles.emojiButton,
-                  selectedEmoji === emoji && styles.emojiButtonSelected,
-                ]}
-                onPress={() => setSelectedEmoji(emoji)}
-              >
-                <Text style={styles.emoji}>{emoji}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+            <Text style={styles.label}>{t('habits.selectIcon')}</Text>
+            <View style={styles.emojiGrid}>
+              {EMOJI_OPTIONS.map((emoji) => (
+                <TouchableOpacity
+                  key={emoji}
+                  style={[
+                    styles.emojiButton,
+                    selectedEmoji === emoji && styles.emojiButtonSelected,
+                  ]}
+                  onPress={() => handleEmojiSelect(emoji)}
+                >
+                  <Text style={styles.emoji}>{emoji}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Настройки напоминаний */}
+            <View style={styles.reminderSection}>
+              <View style={styles.reminderHeader}>
+                <Text style={styles.label}>{t('habits.reminder')}</Text>
+                <Switch
+                  value={reminderEnabled}
+                  onValueChange={setReminderEnabled}
+                  trackColor={{ false: Colors.border, true: Colors.primary + '80' }}
+                  thumbColor={reminderEnabled ? Colors.primary : Colors.textDisabled}
+                />
+              </View>
+
+              {reminderEnabled && (
+                <TouchableOpacity
+                  style={styles.timeButton}
+                  onPress={handleTimePickerOpen}
+                >
+                  <Text style={styles.timeButtonIcon}>⏰</Text>
+                  <Text style={styles.timeButtonText}>{formatTime(reminderTime)}</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {showTimePicker && (
+              <DateTimePicker
+                value={reminderTime}
+                mode="time"
+                is24Hour={true}
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={handleTimeChange}
+              />
+            )}
+          </ScrollView>
 
           <View style={styles.buttons}>
             <TouchableOpacity
               style={[styles.button, styles.buttonCancel]}
-              onPress={onClose}
+              onPress={handleClose}
             >
-              <Text style={styles.buttonTextCancel}>Отмена</Text>
+              <Text style={styles.buttonTextCancel}>{t('common.cancel')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -84,7 +163,7 @@ export const CreateHabitModal = ({ visible, onClose, onSubmit }) => {
               onPress={handleSubmit}
               disabled={!name.trim()}
             >
-              <Text style={styles.buttonTextSubmit}>Создать</Text>
+              <Text style={styles.buttonTextSubmit}>{t('habits.create')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -105,16 +184,17 @@ const styles = StyleSheet.create({
     borderTopRightRadius: Sizes.borderRadius.xl,
     padding: Sizes.spacing.lg,
     paddingBottom: Platform.OS === 'ios' ? 40 : Sizes.spacing.lg,
+    ...Sizes.shadow.xl,
   },
   title: {
     fontSize: Sizes.fontSize.xxl,
-    fontWeight: 'bold',
+    fontWeight: Sizes.fontWeight.bold,
     color: Colors.text,
     marginBottom: Sizes.spacing.lg,
   },
   label: {
     fontSize: Sizes.fontSize.md,
-    fontWeight: '600',
+    fontWeight: Sizes.fontWeight.semibold,
     color: Colors.text,
     marginBottom: Sizes.spacing.sm,
   },
@@ -141,10 +221,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: 'transparent',
+    ...Sizes.shadow.sm,
   },
   emojiButtonSelected: {
     borderColor: Colors.primary,
-    backgroundColor: Colors.primaryLight + '20',
+    backgroundColor: '#E8EAF6',
+    ...Sizes.shadow.md,
   },
   emoji: {
     fontSize: 28,
@@ -158,21 +240,49 @@ const styles = StyleSheet.create({
     padding: Sizes.spacing.md,
     borderRadius: Sizes.borderRadius.md,
     alignItems: 'center',
+    ...Sizes.shadow.sm,
   },
   buttonCancel: {
     backgroundColor: Colors.background,
   },
   buttonSubmit: {
     backgroundColor: Colors.primary,
+    ...Sizes.shadow.md,
   },
   buttonTextCancel: {
     fontSize: Sizes.fontSize.lg,
-    fontWeight: '600',
+    fontWeight: Sizes.fontWeight.semibold,
     color: Colors.text,
   },
   buttonTextSubmit: {
     fontSize: Sizes.fontSize.lg,
-    fontWeight: '600',
+    fontWeight: Sizes.fontWeight.semibold,
     color: Colors.surface,
+  },
+  reminderSection: {
+    marginBottom: Sizes.spacing.lg,
+  },
+  reminderHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Sizes.spacing.md,
+  },
+  timeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.background,
+    borderRadius: Sizes.borderRadius.md,
+    padding: Sizes.spacing.md,
+    gap: Sizes.spacing.md,
+    ...Sizes.shadow.sm,
+  },
+  timeButtonIcon: {
+    fontSize: 24,
+  },
+  timeButtonText: {
+    fontSize: Sizes.fontSize.xl,
+    fontWeight: Sizes.fontWeight.semibold,
+    color: Colors.text,
   },
 });

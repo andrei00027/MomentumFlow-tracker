@@ -9,7 +9,20 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.MomentumFlow",
+      "usesIcloudStorage": true,
+      "infoPlist": {
+        "NSUbiquitousContainers": {
+          "iCloud.$(CFBundleIdentifier)": {
+            "NSUbiquitousContainerIsDocumentScopePublic": true,
+            "NSUbiquitousContainerName": "MomentumFlow",
+            "NSUbiquitousContainerSupportedFolderLevels": "Any"
+          }
+        },
+        "NSHealthShareUsageDescription": "MomentumFlow нужен доступ к вашим данным здоровья, чтобы автоматически отмечать выполнение привычек (тренировки, шаги, сон).",
+        "NSHealthUpdateUsageDescription": "MomentumFlow нужен доступ для записи данных о ваших привычках в Apple Health."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +32,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.MomentumFlow"
     },
     "web": {
       "output": "static",
@@ -38,7 +52,17 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#3949AB",
+          "sounds": []
+        }
+      ],
+      "expo-apple-authentication",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,11 +1,18 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { Colors, Sizes } from '@/src/constants';
 import { useHabits } from '@/src/context/HabitsContext';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import TimeChart from '@/src/components/charts/TimeChart';
+import StreakChart from '@/src/components/charts/StreakChart';
+import CompletionRateChart from '@/src/components/charts/CompletionRateChart';
 
 export default function StatsScreen() {
+  const { t } = useTranslation();
   const { habits } = useHabits();
+  const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null);
+  const [period, setPeriod] = useState<'week' | 'month' | 'year'>('week');
 
   // Общая статистика
   const stats = useMemo(() => {
@@ -34,10 +41,16 @@ export default function StatsScreen() {
       .slice(0, 3);
   }, [habits]);
 
+  // Выбранная привычка для графиков
+  const selectedHabit = useMemo(() => {
+    if (!selectedHabitId) return habits[0] || null;
+    return habits.find(h => h.id === selectedHabitId) || habits[0] || null;
+  }, [selectedHabitId, habits]);
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Статистика</Text>
+        <Text style={styles.headerTitle}>{t('stats.title')}</Text>
       </View>
 
       <ScrollView style={styles.content}>
@@ -45,28 +58,28 @@ export default function StatsScreen() {
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{stats.totalHabits}</Text>
-            <Text style={styles.statLabel}>Всего привычек</Text>
+            <Text style={styles.statLabel}>{t('stats.totalHabits')}</Text>
           </View>
 
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{stats.completedToday}</Text>
-            <Text style={styles.statLabel}>Выполнено сегодня</Text>
+            <Text style={styles.statLabel}>{t('stats.completedToday')}</Text>
           </View>
 
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{stats.totalStreak}</Text>
-            <Text style={styles.statLabel}>Общий стрик</Text>
+            <Text style={styles.statLabel}>{t('stats.averageStreak')}</Text>
           </View>
 
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{stats.maxStreak}</Text>
-            <Text style={styles.statLabel}>Лучший стрик</Text>
+            <Text style={styles.statLabel}>{t('stats.bestStreak')}</Text>
           </View>
         </View>
 
         {/* Прогресс за сегодня */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Прогресс за сегодня</Text>
+          <Text style={styles.sectionTitle}>{t('home.today')}</Text>
           <View style={styles.progressCard}>
             <View style={styles.progressInfo}>
               <Text style={styles.progressValue}>{stats.completionRate}%</Text>
@@ -97,10 +110,83 @@ export default function StatsScreen() {
                 <Text style={styles.topHabitIcon}>{habit.icon}</Text>
                 <View style={styles.topHabitInfo}>
                   <Text style={styles.topHabitName}>{habit.name}</Text>
-                  <Text style={styles.topHabitStreak}>🔥 {habit.currentStreak} дней</Text>
+                  <Text style={styles.topHabitStreak}>🔥 {t('habits.days', { count: habit.currentStreak })}</Text>
                 </View>
               </View>
             ))}
+          </View>
+        )}
+
+        {/* Графики */}
+        {habits.length > 0 && selectedHabit && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>{t('stats.completionRate')}</Text>
+
+            {/* Выбор привычки */}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.habitSelector}
+            >
+              {habits.map((habit) => (
+                <TouchableOpacity
+                  key={habit.id}
+                  style={[
+                    styles.habitSelectorItem,
+                    selectedHabit.id === habit.id && styles.habitSelectorItemActive
+                  ]}
+                  onPress={() => setSelectedHabitId(habit.id)}
+                >
+                  <Text style={styles.habitSelectorIcon}>{habit.icon}</Text>
+                  <Text style={[
+                    styles.habitSelectorText,
+                    selectedHabit.id === habit.id && styles.habitSelectorTextActive
+                  ]}>
+                    {habit.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            {/* Выбор периода */}
+            <View style={styles.periodSelector}>
+              {(['week', 'month', 'year'] as const).map((p) => (
+                <TouchableOpacity
+                  key={p}
+                  style={[
+                    styles.periodButton,
+                    period === p && styles.periodButtonActive
+                  ]}
+                  onPress={() => setPeriod(p)}
+                >
+                  <Text style={[
+                    styles.periodButtonText,
+                    period === p && styles.periodButtonTextActive
+                  ]}>
+                    {p === 'week' ? t('stats.lastWeek') : p === 'month' ? t('stats.lastMonth') : t('stats.allTime')}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* График процента выполнения */}
+            <CompletionRateChart
+              completionHistory={selectedHabit.completionHistory}
+              habitName={selectedHabit.name}
+              period={period}
+            />
+
+            {/* График динамики streak */}
+            <StreakChart
+              completionHistory={selectedHabit.completionHistory}
+              habitName={selectedHabit.name}
+            />
+
+            {/* График времени выполнения */}
+            <TimeChart
+              completionHistory={selectedHabit.completionHistory}
+              habitName={selectedHabit.name}
+            />
           </View>
         )}
       </ScrollView>
@@ -227,5 +313,62 @@ const styles = StyleSheet.create({
   topHabitStreak: {
     fontSize: Sizes.fontSize.sm,
     color: Colors.textSecondary,
+  },
+  habitSelector: {
+    marginBottom: Sizes.spacing.md,
+  },
+  habitSelectorItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    paddingHorizontal: Sizes.spacing.md,
+    paddingVertical: Sizes.spacing.sm,
+    borderRadius: Sizes.borderRadius.lg,
+    marginRight: Sizes.spacing.sm,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  habitSelectorItemActive: {
+    backgroundColor: Colors.primary + '20',
+    borderColor: Colors.primary,
+  },
+  habitSelectorIcon: {
+    fontSize: 24,
+    marginRight: Sizes.spacing.xs,
+  },
+  habitSelectorText: {
+    fontSize: Sizes.fontSize.md,
+    color: Colors.text,
+    fontWeight: '500',
+  },
+  habitSelectorTextActive: {
+    color: Colors.primary,
+    fontWeight: '700',
+  },
+  periodSelector: {
+    flexDirection: 'row',
+    backgroundColor: Colors.surface,
+    borderRadius: Sizes.borderRadius.lg,
+    padding: 4,
+    marginBottom: Sizes.spacing.md,
+  },
+  periodButton: {
+    flex: 1,
+    paddingVertical: Sizes.spacing.sm,
+    paddingHorizontal: Sizes.spacing.md,
+    borderRadius: Sizes.borderRadius.md,
+    alignItems: 'center',
+  },
+  periodButtonActive: {
+    backgroundColor: Colors.primary,
+  },
+  periodButtonText: {
+    fontSize: Sizes.fontSize.sm,
+    color: Colors.textSecondary,
+    fontWeight: '500',
+  },
+  periodButtonTextActive: {
+    color: Colors.white,
+    fontWeight: '700',
   },
 });

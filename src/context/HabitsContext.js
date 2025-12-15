@@ -1,6 +1,9 @@
 // src/context/HabitsContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { AsyncStorageService } from '@/src/services/storage/AsyncStorageService';
+import NotificationService from '@/src/services/notifications/NotificationService';
+import CloudStorageService from '@/src/services/storage/CloudStorageService';
+import AppleHealthService from '@/src/services/health/AppleHealthService';
 
 const HabitsContext = createContext();
 
@@ -53,9 +56,31 @@ const mockHabits = [
 export const HabitsProvider = ({ children }) => {
   const [habits, setHabits] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState(null);
 
-  // Загрузить привычки при запуске
+  // Запросить разрешения на уведомления и HealthKit при запуске
   useEffect(() => {
+    const initServices = async () => {
+      try {
+        // Инициализация уведомлений
+        await NotificationService.requestPermissions();
+      } catch (error) {
+        console.log('Notifications not supported on this device:', error.message);
+      }
+
+      try {
+        // Инициализация HealthKit
+        const healthInitialized = await AppleHealthService.initialize();
+        if (healthInitialized) {
+          console.log('Apple Health initialized successfully');
+        }
+      } catch (error) {
+        console.log('Apple Health not available:', error.message);
+      }
+    };
+
+    initServices();
     loadHabitsFromStorage();
   }, []);
 
@@ -74,7 +99,7 @@ export const HabitsProvider = ({ children }) => {
   };
 
   // Добавить новую привычку
-  const addHabit = (habit) => {
+  const addHabit = async (habit) => {
     const newHabit = {
       id: Date.now().toString(),
       ...habit,
@@ -83,19 +108,74 @@ export const HabitsProvider = ({ children }) => {
       completionHistory: {},
       createdAt: new Date().toISOString(),
     };
+
+    // Если включены напоминания, запланировать уведомление
+    if (habit.reminderEnabled && habit.reminderTime) {
+      try {
+        const reminderDate = new Date(habit.reminderTime);
+        const notificationId = await NotificationService.scheduleHabitReminder(
+          newHabit.id,
+          newHabit.name,
+          newHabit.icon,
+          reminderDate.getHours(),
+          reminderDate.getMinutes()
+        );
+        newHabit.notificationId = notificationId;
+      } catch (error) {
+        console.error('Failed to schedule notification:', error);
+      }
+    }
+
     setHabits([...habits, newHabit]);
   };
 
   // Обновить привычку
-  const updateHabit = (id, updates) => {
-    setHabits(habits.map(habit =>
-      habit.id === id ? { ...habit, ...updates } : habit
+  const updateHabit = async (id, updates) => {
+    const habit = habits.find(h => h.id === id);
+    if (!habit) return;
+
+    // Если изменились настройки напоминаний
+    if ('reminderEnabled' in updates || 'reminderTime' in updates) {
+      // Отменить старое уведомление, если было
+      if (habit.notificationId) {
+        await NotificationService.cancelNotification(habit.notificationId);
+      }
+
+      // Если напоминания включены, создать новое уведомление
+      if (updates.reminderEnabled && updates.reminderTime) {
+        try {
+          const reminderDate = new Date(updates.reminderTime);
+          const notificationId = await NotificationService.scheduleHabitReminder(
+            id,
+            updates.name || habit.name,
+            updates.icon || habit.icon,
+            reminderDate.getHours(),
+            reminderDate.getMinutes()
+          );
+          updates.notificationId = notificationId;
+        } catch (error) {
+          console.error('Failed to schedule notification:', error);
+        }
+      } else {
+        updates.notificationId = null;
+      }
+    }
+
+    setHabits(habits.map(h =>
+      h.id === id ? { ...h, ...updates } : h
     ));
   };
 
   // Удалить привычку
-  const deleteHabit = (id) => {
-    setHabits(habits.filter(habit => habit.id !== id));
+  const deleteHabit = async (id) => {
+    const habit = habits.find(h => h.id === id);
+
+    // Отменить уведомление, если было запланировано
+    if (habit?.notificationId) {
+      await NotificationService.cancelNotification(habit.notificationId);
+    }
+
+    setHabits(habits.filter(h => h.id !== id));
   };
 
   // Отметить выполнение привычки
@@ -160,6 +240,81 @@ export const HabitsProvider = ({ children }) => {
     await loadHabitsFromStorage();
   };
 
+  // Проверить и автоматически отметить привычки на основе Apple Health
+  const checkHealthKitGoals = async () => {
+    if (!AppleHealthService.isAvailable) {
+      return;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const updated = [];
+
+    for (const habit of habits) {
+      // Пропустить привычки, которые уже выполнены сегодня
+      if (habit.completionHistory[today]?.completed) {
+        continue;
+      }
+
+      // Проверить привычки с интеграцией Apple Health
+      if (habit.healthKitEnabled && habit.healthKitMetric) {
+        try {
+          const { achieved, currentValue } = await AppleHealthService.checkGoalAchievement(
+            habit.healthKitMetric,
+            habit.targetValue || 1
+          );
+
+          if (achieved) {
+            // Автоматически отметить привычку как выполненную
+            updated.push({
+              id: habit.id,
+              name: habit.name,
+              value: currentValue,
+            });
+            completeHabit(habit.id);
+          }
+        } catch (error) {
+          console.error(`Error checking HealthKit goal for ${habit.name}:`, error);
+        }
+      }
+    }
+
+    return updated;
+  };
+
+  // Синхронизировать с iCloud
+  const syncWithCloud = async () => {
+    try {
+      setIsSyncing(true);
+
+      // Проверить доступность облака
+      const availabilityStatus = await CloudStorageService.isAvailable();
+      if (!availabilityStatus.available) {
+        console.log('Cloud storage not available:', availabilityStatus.error);
+        return { success: false, error: availabilityStatus.error };
+      }
+
+      // Синхронизировать данные
+      const mergedHabits = await CloudStorageService.sync(habits);
+
+      // Обновить локальное состояние
+      setHabits(mergedHabits);
+
+      // Также сохранить в AsyncStorage
+      await AsyncStorageService.saveHabits(mergedHabits);
+
+      // Обновить время последней синхронизации
+      const syncTime = await CloudStorageService.getLastSyncTime();
+      setLastSyncTime(syncTime);
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error syncing with cloud:', error);
+      return { success: false, error: error.message };
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const value = {
     habits,
     addHabit,
@@ -169,6 +324,11 @@ export const HabitsProvider = ({ children }) => {
     uncompleteHabit,
     isCompletedToday,
     reloadHabits,
+    syncWithCloud,
+    isSyncing,
+    isLoaded,
+    lastSyncTime,
+    checkHealthKitGoals,
   };
 
   return (

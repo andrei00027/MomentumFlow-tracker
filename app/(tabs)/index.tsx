@@ -1,19 +1,26 @@
 import { useState, useMemo } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
 import { Colors, Sizes } from '@/src/constants';
 import { useHabits } from '@/src/context/HabitsContext';
 import { HabitList } from '@/src/components/habits/HabitList';
 import { CreateHabitModal } from '@/src/components/habits/CreateHabitModal';
 import { EditHabitModal } from '@/src/components/habits/EditHabitModal';
 import { HabitActionSheet } from '@/src/components/habits/HabitActionSheet';
+import { LoadingSpinner } from '@/src/components/common/LoadingSpinner';
+import { Toast } from '@/src/components/common/Toast';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function HomeScreen() {
-  const { habits, completeHabit, uncompleteHabit, isCompletedToday, addHabit, updateHabit, deleteHabit, reloadHabits } = useHabits();
+  const { t } = useTranslation();
+  const { habits, completeHabit, uncompleteHabit, isCompletedToday, addHabit, updateHabit, deleteHabit, reloadHabits, isLoaded } = useHabits();
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<any>(null);
+  const { toast, hideToast, showSuccess, showError } = useToast();
 
   // Подсчет прогресса
   const progress = useMemo(() => {
@@ -36,8 +43,13 @@ export default function HomeScreen() {
   };
 
   const handleAddHabit = (habitData: any) => {
-    addHabit(habitData);
-    setCreateModalVisible(false);
+    try {
+      addHabit(habitData);
+      setCreateModalVisible(false);
+      showSuccess(t('habits.saveSuccess'));
+    } catch (error) {
+      showError(t('errors.storage'));
+    }
   };
 
   const handleLongPress = (habit: any) => {
@@ -50,26 +62,49 @@ export default function HomeScreen() {
     setEditModalVisible(true);
   };
 
+  const handleOpenCreateModal = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setCreateModalVisible(true);
+  };
+
   const handleUpdateHabit = (updates: any) => {
     if (selectedHabit) {
-      updateHabit(selectedHabit.id, updates);
-      setEditModalVisible(false);
-      setSelectedHabit(null);
+      try {
+        updateHabit(selectedHabit.id, updates);
+        setEditModalVisible(false);
+        setSelectedHabit(null);
+        showSuccess(t('habits.saveSuccess'));
+      } catch (error) {
+        showError(t('errors.storage'));
+      }
     }
   };
 
   const handleDelete = (id: string) => {
-    deleteHabit(id);
-    setSelectedHabit(null);
+    try {
+      deleteHabit(id);
+      setSelectedHabit(null);
+      showSuccess(t('habits.deleteSuccess'));
+    } catch (error) {
+      showError(t('errors.storage'));
+    }
   };
+
+  if (!isLoaded) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <LoadingSpinner text={t('common.loading')} />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Мои привычки</Text>
+        <Text style={styles.headerTitle}>{t('home.title')}</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => setCreateModalVisible(true)}
+          onPress={handleOpenCreateModal}
         >
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
@@ -79,7 +114,7 @@ export default function HomeScreen() {
         <View style={styles.progressSection}>
           <View style={styles.progressInfo}>
             <Text style={styles.progressText}>
-              {progress.completed} из {progress.total} выполнено
+              {t('home.progress', { completed: progress.completed, total: progress.total })}
             </Text>
             <Text style={styles.progressPercentage}>{progress.percentage}%</Text>
           </View>
@@ -119,6 +154,13 @@ export default function HomeScreen() {
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
+
+      <Toast
+        visible={toast.visible}
+        message={toast.message}
+        type={toast.type}
+        onHide={hideToast}
+      />
     </SafeAreaView>
   );
 }
@@ -137,21 +179,17 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: Sizes.fontSize.xxl,
-    fontWeight: 'bold',
+    fontWeight: Sizes.fontWeight.bold,
     color: Colors.text,
   },
   addButton: {
     width: 44,
     height: 44,
-    borderRadius: 22,
+    borderRadius: Sizes.borderRadius.full,
     backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    ...Sizes.shadow.lg,
   },
   addButtonText: {
     fontSize: 28,
@@ -172,12 +210,12 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: Sizes.fontSize.md,
     color: Colors.text,
-    fontWeight: '600',
+    fontWeight: Sizes.fontWeight.semibold,
   },
   progressPercentage: {
     fontSize: Sizes.fontSize.lg,
     color: Colors.primary,
-    fontWeight: 'bold',
+    fontWeight: Sizes.fontWeight.bold,
   },
   progressBarContainer: {
     height: 8,

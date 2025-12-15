@@ -26,9 +26,14 @@ export const Colors = {
   // Нейтральные
   background: '#F5F5F5',
   surface: '#FFFFFF',
+  white: '#FFFFFF',
+  black: '#000000',
   text: '#212121',
   textSecondary: '#757575',
   textDisabled: '#BDBDBD',
   border: '#E0E0E0',
   divider: '#EEEEEE',
+
+  // Дополнительные цвета для графиков
+  secondary: '#26C6DA',
 };
