@@ -1,12 +1,14 @@
 // src/components/habits/HabitCard.js
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { Colors, Sizes } from '@/src/constants';
+import { HabitIcon } from '@/src/components/common/HabitIcon';
+import { tPlural } from '@/src/i18n';
+import { useHabits } from '@/src/context/HabitsContext';
 
-export const HabitCard = ({ habit, onComplete, isCompleted, onLongPress, index = 0 }) => {
-  const { t } = useTranslation();
+export const HabitCard = ({ habit, onComplete, isCompleted, onPress, index = 0 }) => {
+  const { getQuitHabitStreak } = useHabits();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   const checkboxScale = useRef(new Animated.Value(1)).current;
@@ -51,9 +53,9 @@ export const HabitCard = ({ habit, onComplete, isCompleted, onLongPress, index =
     onComplete(habit.id);
   };
 
-  const handleLongPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    onLongPress?.(habit);
+  const handleCardPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onPress?.(habit);
   };
 
   return (
@@ -65,17 +67,29 @@ export const HabitCard = ({ habit, onComplete, isCompleted, onLongPress, index =
     >
       <TouchableOpacity
         style={styles.card}
-        onLongPress={handleLongPress}
+        onPress={handleCardPress}
         activeOpacity={0.8}
-        delayLongPress={500}
       >
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.icon}>{habit.icon || '✨'}</Text>
+            <View style={styles.iconContainer}>
+              <HabitIcon
+                name={habit.icon || 'checkmark'}
+                size={32}
+                color={Colors.primary}
+              />
+            </View>
             <View style={styles.info}>
               <Text style={styles.name}>{habit.name}</Text>
-              {habit.currentStreak > 0 && (
-                <Text style={styles.streak}>🔥 {t('habits.days', { count: habit.currentStreak })}</Text>
+              {habit.isQuitHabit ? (
+                // Для quit habit показываем дни без действия
+                <Text style={[styles.streak, styles.quitStreak]}>
+                  {tPlural('habits.days', getQuitHabitStreak(habit))}
+                </Text>
+              ) : (
+                habit.currentStreak > 0 && (
+                  <Text style={styles.streak}>{tPlural('habits.days', habit.currentStreak)}</Text>
+                )
               )}
             </View>
           </View>
@@ -83,11 +97,17 @@ export const HabitCard = ({ habit, onComplete, isCompleted, onLongPress, index =
 
         <Animated.View style={{ transform: [{ scale: checkboxScale }] }}>
           <TouchableOpacity
-            style={[styles.checkbox, isCompleted && styles.checkboxCompleted]}
+            style={[
+              styles.checkbox,
+              habit.isQuitHabit ? styles.checkboxQuit : null,
+              isCompleted && (habit.isQuitHabit ? styles.checkboxSlip : styles.checkboxCompleted),
+            ]}
             onPress={handlePress}
             activeOpacity={0.7}
           >
-            {isCompleted && <Text style={styles.checkmark}>✓</Text>}
+            {isCompleted && (
+              <Text style={styles.checkmark}>{habit.isQuitHabit ? '!' : '✓'}</Text>
+            )}
           </TouchableOpacity>
         </Animated.View>
       </TouchableOpacity>
@@ -112,9 +132,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {
-    fontSize: 32,
+  iconContainer: {
     marginRight: Sizes.spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   info: {
     flex: 1,
@@ -130,6 +151,9 @@ const styles = StyleSheet.create({
     fontWeight: Sizes.fontWeight.medium,
     color: Colors.textSecondary,
   },
+  quitStreak: {
+    color: Colors.success,
+  },
   checkbox: {
     width: 32,
     height: 32,
@@ -143,6 +167,13 @@ const styles = StyleSheet.create({
   checkboxCompleted: {
     backgroundColor: Colors.success,
     borderColor: Colors.success,
+  },
+  checkboxQuit: {
+    borderColor: Colors.error,
+  },
+  checkboxSlip: {
+    backgroundColor: Colors.error,
+    borderColor: Colors.error,
   },
   checkmark: {
     color: Colors.surface,

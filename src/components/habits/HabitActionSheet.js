@@ -9,7 +9,9 @@ import {
   TouchableWithoutFeedback,
   Alert,
 } from 'react-native';
+import Icon from 'react-native-remix-icon';
 import { Colors, Sizes } from '@/src/constants';
+import { HabitIcon } from '@/src/components/common/HabitIcon';
 
 export const HabitActionSheet = ({ visible, onClose, habit, onEdit, onDelete }) => {
   const handleDelete = () => {
@@ -53,17 +55,23 @@ export const HabitActionSheet = ({ visible, onClose, habit, onEdit, onDelete }) 
           <TouchableWithoutFeedback>
             <View style={styles.sheet}>
               <View style={styles.header}>
-                <Text style={styles.habitIcon}>{habit?.icon}</Text>
+                <View style={styles.habitIconContainer}>
+                  <HabitIcon
+                    name={habit?.icon || 'checkbox-circle'}
+                    size={48}
+                    color={Colors.primary}
+                  />
+                </View>
                 <Text style={styles.habitName}>{habit?.name}</Text>
               </View>
 
               <TouchableOpacity style={styles.option} onPress={handleEdit}>
-                <Text style={styles.optionIcon}>✏️</Text>
+                <Icon name="edit-line" size={24} color={Colors.text} style={{ marginRight: Sizes.spacing.md }} />
                 <Text style={styles.optionText}>Редактировать</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.option} onPress={handleDelete}>
-                <Text style={styles.optionIcon}>🗑️</Text>
+                <Icon name="delete-bin-line" size={24} color={Colors.error} style={{ marginRight: Sizes.spacing.md }} />
                 <Text style={[styles.optionText, styles.optionTextDanger]}>Удалить</Text>
               </TouchableOpacity>
 
@@ -98,8 +106,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
-  habitIcon: {
-    fontSize: 48,
+  habitIconContainer: {
     marginBottom: Sizes.spacing.sm,
   },
   habitName: {
@@ -115,10 +122,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderRadius: Sizes.borderRadius.md,
     marginBottom: Sizes.spacing.sm,
-  },
-  optionIcon: {
-    fontSize: 24,
-    marginRight: Sizes.spacing.md,
   },
   optionText: {
     fontSize: Sizes.fontSize.lg,

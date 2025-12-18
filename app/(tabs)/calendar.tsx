@@ -1,12 +1,108 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { useTranslation } from 'react-i18next';
 import { Colors, Sizes } from '@/src/constants';
 import { useHabits } from '@/src/context/HabitsContext';
 import { useMemo } from 'react';
+import { tPlural } from '@/src/i18n';
+
+// Configure Russian locale for calendar
+LocaleConfig.locales['ru'] = {
+  monthNames: [
+    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+  ],
+  monthNamesShort: [
+    'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+    'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+  ],
+  dayNames: [
+    'Воскресенье', 'Понедельник', 'Вторник', 'Среда',
+    'Четверг', 'Пятница', 'Суббота'
+  ],
+  dayNamesShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+  today: 'Сегодня'
+};
+
+LocaleConfig.locales['en'] = {
+  monthNames: [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ],
+  monthNamesShort: [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ],
+  dayNames: [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+    'Thursday', 'Friday', 'Saturday'
+  ],
+  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  today: 'Today'
+};
+
+// Indonesian locale
+LocaleConfig.locales['id'] = {
+  monthNames: [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ],
+  monthNamesShort: [
+    'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+    'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+  ],
+  dayNames: [
+    'Minggu', 'Senin', 'Selasa', 'Rabu',
+    'Kamis', 'Jumat', 'Sabtu'
+  ],
+  dayNamesShort: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+  today: 'Hari ini'
+};
+
+// Chinese locale
+LocaleConfig.locales['zh'] = {
+  monthNames: [
+    '一月', '二月', '三月', '四月', '五月', '六月',
+    '七月', '八月', '九月', '十月', '十一月', '十二月'
+  ],
+  monthNamesShort: [
+    '1月', '2月', '3月', '4月', '5月', '6月',
+    '7月', '8月', '9月', '10月', '11月', '12月'
+  ],
+  dayNames: [
+    '星期日', '星期一', '星期二', '星期三',
+    '星期四', '星期五', '星期六'
+  ],
+  dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+  today: '今天'
+};
+
+// Spanish locale
+LocaleConfig.locales['es'] = {
+  monthNames: [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ],
+  monthNamesShort: [
+    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+  ],
+  dayNames: [
+    'Domingo', 'Lunes', 'Martes', 'Miércoles',
+    'Jueves', 'Viernes', 'Sábado'
+  ],
+  dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+  today: 'Hoy'
+};
 
 export default function CalendarScreen() {
+  const { t, i18n } = useTranslation();
   const { habits } = useHabits();
+
+  // Set calendar locale based on current app language
+  const supportedLocales = ['ru', 'en', 'id', 'zh', 'es'];
+  LocaleConfig.defaultLocale = supportedLocales.includes(i18n.language) ? i18n.language : 'en';
 
   // Подготовить marked dates для календаря
   const markedDates = useMemo(() => {
@@ -54,19 +150,21 @@ export default function CalendarScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Календарь</Text>
+        <Text style={styles.headerTitle}>{t('calendar.title')}</Text>
       </View>
 
       <ScrollView style={styles.content}>
         <View style={styles.statsCard}>
-          <Text style={styles.statsLabel}>Активные дни за месяц</Text>
-          <Text style={styles.statsValue}>{monthStats} дней</Text>
+          <Text style={styles.statsLabel}>{t('calendar.activeDaysMonth')}</Text>
+          <Text style={styles.statsValue}>{tPlural('calendar.days', monthStats)}</Text>
         </View>
 
         <View style={styles.calendarContainer}>
           <Calendar
+            key={i18n.language}
             markedDates={markedDates}
             markingType="multi-dot"
+            firstDay={1}
             theme={{
               backgroundColor: Colors.background,
               calendarBackground: Colors.surface,
@@ -89,7 +187,7 @@ export default function CalendarScreen() {
         <View style={styles.legend}>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: Colors.success }]} />
-            <Text style={styles.legendText}>Выполненная привычка</Text>
+            <Text style={styles.legendText}>{t('calendar.completedHabit')}</Text>
           </View>
         </View>
       </ScrollView>

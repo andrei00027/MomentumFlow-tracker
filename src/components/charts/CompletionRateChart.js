@@ -2,11 +2,14 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ProgressChart } from 'react-native-chart-kit';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/Colors';
 
 const screenWidth = Dimensions.get('window').width;
 
-const CompletionRateChart = ({ completionHistory, habitName = 'Привычка', period = 'week' }) => {
+const CompletionRateChart = ({ completionHistory, habitName, period = 'week' }) => {
+  const { t } = useTranslation();
+  const displayName = habitName || t('charts.habit');
   // Обработка данных: вычисляем процент выполнения за период
   const chartData = useMemo(() => {
     if (!completionHistory || Object.keys(completionHistory).length === 0) {
@@ -54,37 +57,37 @@ const CompletionRateChart = ({ completionHistory, habitName = 'Привычка'
   if (!chartData) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Недостаточно данных для графика</Text>
+        <Text style={styles.emptyText}>{t('charts.noData')}</Text>
         <Text style={styles.emptySubtext}>
-          Выполняйте привычку, чтобы увидеть статистику
+          {t('charts.noDataHint')}
         </Text>
       </View>
     );
   }
 
   const periodName = {
-    week: 'неделю',
-    month: 'месяц',
-    year: 'год',
+    week: t('charts.periodWeek'),
+    month: t('charts.periodMonth'),
+    year: t('charts.periodYear'),
   }[period];
 
   const percentage = Math.round(chartData.rate * 100);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Процент выполнения: {habitName}</Text>
-      <Text style={styles.subtitle}>За {periodName}</Text>
+      <Text style={styles.title}>{t('charts.completionRate')}: {displayName}</Text>
+      <Text style={styles.subtitle}>{t('charts.forPeriod', { period: periodName })}</Text>
 
       <View style={styles.chartContainer}>
         <ProgressChart
           data={{
-            labels: ['Выполнено'],
+            labels: [t('charts.completed')],
             data: [chartData.rate],
           }}
           width={screenWidth - 80}
-          height={200}
-          strokeWidth={16}
-          radius={70}
+          height={130}
+          strokeWidth={10}
+          radius={50}
           chartConfig={{
             backgroundColor: Colors.white,
             backgroundGradientFrom: Colors.white,
@@ -115,21 +118,21 @@ const CompletionRateChart = ({ completionHistory, habitName = 'Привычка'
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{chartData.completed}</Text>
-          <Text style={styles.statLabel}>Выполнено</Text>
+          <Text style={styles.statLabel}>{t('charts.completed')}</Text>
         </View>
 
         <View style={styles.statDivider} />
 
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{chartData.missed}</Text>
-          <Text style={styles.statLabel}>Пропущено</Text>
+          <Text style={styles.statLabel}>{t('charts.missed')}</Text>
         </View>
 
         <View style={styles.statDivider} />
 
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{chartData.total}</Text>
-          <Text style={styles.statLabel}>Всего дней</Text>
+          <Text style={styles.statLabel}>{t('charts.totalDays')}</Text>
         </View>
       </View>
     </View>
@@ -157,7 +160,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: Colors.textSecondary,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   chartContainer: {
     alignItems: 'center',
@@ -173,15 +176,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   percentageText: {
-    fontSize: 48,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 24,
-    paddingTop: 16,
+    marginTop: 12,
+    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: Colors.border,
   },

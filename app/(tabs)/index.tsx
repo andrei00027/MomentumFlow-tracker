@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, SectionList, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { Colors, Sizes } from '@/src/constants';
 import { useHabits } from '@/src/context/HabitsContext';
-import { HabitList } from '@/src/components/habits/HabitList';
+import { HabitCard } from '@/src/components/habits/HabitCard';
 import { CreateHabitModal } from '@/src/components/habits/CreateHabitModal';
 import { EditHabitModal } from '@/src/components/habits/EditHabitModal';
 import { HabitActionSheet } from '@/src/components/habits/HabitActionSheet';
@@ -15,23 +15,50 @@ import { useToast } from '@/src/hooks/useToast';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
-  const { habits, completeHabit, uncompleteHabit, isCompletedToday, addHabit, updateHabit, deleteHabit, reloadHabits, isLoaded } = useHabits();
+  const { habits, completeHabit, uncompleteHabit, isCompletedToday, isScheduledForToday, addHabit, updateHabit, deleteHabit, reloadHabits, isLoaded } = useHabits();
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<any>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const { toast, hideToast, showSuccess, showError } = useToast();
 
-  // Подсчет прогресса
+  // Привычки, запланированные на сегодня
+  const todayHabits = useMemo(() => {
+    return habits.filter((h: any) => isScheduledForToday(h));
+  }, [habits, isScheduledForToday]);
+
+  // Привычки на другие дни (не сегодня)
+  const otherHabits = useMemo(() => {
+    return habits.filter((h: any) => !isScheduledForToday(h));
+  }, [habits, isScheduledForToday]);
+
+  // Секции для SectionList
+  const sections = useMemo(() => {
+    const result = [];
+    if (todayHabits.length > 0) {
+      result.push({ title: t('home.today'), data: todayHabits, isToday: true });
+    }
+    if (otherHabits.length > 0) {
+      result.push({ title: t('home.otherDays'), data: otherHabits, isToday: false });
+    }
+    return result;
+  }, [todayHabits, otherHabits, t]);
+
+  // Подсчет прогресса (только для запланированных привычек, без quit habits)
   const progress = useMemo(() => {
-    const total = habits.length;
-    const completed = habits.filter((h: any) => isCompletedToday(h.id)).length;
+    // Исключаем вредные привычки из расчёта прогресса
+    const regularHabits = todayHabits.filter((h: any) => !h.isQuitHabit);
+    const total = regularHabits.length;
+    const completed = regularHabits.filter((h: any) => isCompletedToday(h.id)).length;
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
     return { total, completed, percentage };
-  }, [habits, isCompletedToday]);
+  }, [todayHabits, isCompletedToday]);
 
   const handleRefresh = async () => {
+    setRefreshing(true);
     await reloadHabits();
+    setRefreshing(false);
   };
 
   const handleComplete = (id: string) => {
@@ -52,9 +79,9 @@ export default function HomeScreen() {
     }
   };
 
-  const handleLongPress = (habit: any) => {
+  const handleHabitPress = (habit: any) => {
     setSelectedHabit(habit);
-    setActionSheetVisible(true);
+    setEditModalVisible(true);
   };
 
   const handleEdit = (habit: any) => {
@@ -110,29 +137,58 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      {habits.length > 0 && (
-        <View style={styles.progressSection}>
-          <View style={styles.progressInfo}>
-            <Text style={styles.progressText}>
-              {t('home.progress', { completed: progress.completed, total: progress.total })}
-            </Text>
-            <Text style={styles.progressPercentage}>{progress.percentage}%</Text>
-          </View>
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${progress.percentage}%` }]} />
-          </View>
+      {habits.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyIcon}>🌊</Text>
+          <Text style={styles.emptyTitle}>{t('habits.emptyStateTitle')}</Text>
+          <Text style={styles.emptyText}>{t('habits.emptyStateDescription')}</Text>
         </View>
-      )}
-
-      <View style={styles.content}>
-        <HabitList
-          habits={habits}
-          onComplete={handleComplete}
-          isCompletedToday={isCompletedToday}
-          onLongPress={handleLongPress}
-          onRefresh={handleRefresh}
+      ) : (
+        <SectionList
+          sections={sections}
+          keyExtractor={(item: any) => item.id}
+          renderItem={({ item, index, section }: any) => (
+            <HabitCard
+              habit={item}
+              index={index}
+              onComplete={handleComplete}
+              isCompleted={isCompletedToday(item.id)}
+              onPress={handleHabitPress}
+            />
+          )}
+          renderSectionHeader={({ section }: any) => (
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{section.title}</Text>
+            </View>
+          )}
+          ListHeaderComponent={
+            todayHabits.length > 0 ? (
+              <View style={styles.progressSection}>
+                <View style={styles.progressInfo}>
+                  <Text style={styles.progressText}>
+                    {t('home.progress', { completed: progress.completed, total: progress.total })}
+                  </Text>
+                  <Text style={styles.progressPercentage}>{progress.percentage}%</Text>
+                </View>
+                <View style={styles.progressBarContainer}>
+                  <View style={[styles.progressBar, { width: `${progress.percentage}%` }]} />
+                </View>
+              </View>
+            ) : null
+          }
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={Colors.primary}
+              colors={[Colors.primary]}
+            />
+          }
         />
-      </View>
+      )}
 
       <CreateHabitModal
         visible={createModalVisible}
@@ -144,6 +200,7 @@ export default function HomeScreen() {
         visible={editModalVisible}
         onClose={() => setEditModalVisible(false)}
         onSubmit={handleUpdateHabit}
+        onDelete={handleDelete}
         habit={selectedHabit}
       />
 
@@ -218,7 +275,7 @@ const styles = StyleSheet.create({
     fontWeight: Sizes.fontWeight.bold,
   },
   progressBarContainer: {
-    height: 8,
+    height: 6,
     backgroundColor: Colors.surface,
     borderRadius: Sizes.borderRadius.md,
     overflow: 'hidden',
@@ -228,7 +285,43 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.success,
     borderRadius: Sizes.borderRadius.md,
   },
-  content: {
+  listContent: {
+    padding: Sizes.spacing.md,
+    paddingTop: 0,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: Sizes.spacing.sm,
+    marginTop: Sizes.spacing.sm,
+  },
+  sectionTitle: {
+    fontSize: Sizes.fontSize.lg,
+    fontWeight: Sizes.fontWeight.semibold,
+    color: Colors.text,
+  },
+  emptyContainer: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Sizes.spacing.xl,
+  },
+  emptyIcon: {
+    fontSize: 72,
+    marginBottom: Sizes.spacing.lg,
+  },
+  emptyTitle: {
+    fontSize: Sizes.fontSize.xxl,
+    fontWeight: Sizes.fontWeight.bold,
+    color: Colors.text,
+    marginBottom: Sizes.spacing.sm,
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: Sizes.fontSize.md,
+    fontWeight: Sizes.fontWeight.medium,
+    color: Colors.textSecondary,
+    textAlign: 'center',
   },
 });

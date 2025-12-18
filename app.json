@@ -10,8 +10,19 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.MomentumFlow",
+      "bundleIdentifier": "com.andrej.momentumflow",
       "usesIcloudStorage": true,
+      "entitlements": {
+        "com.apple.developer.applesignin": ["Default"],
+        "com.apple.developer.healthkit": true,
+        "com.apple.developer.icloud-container-identifiers": [
+          "iCloud.$(CFBundleIdentifier)"
+        ],
+        "com.apple.developer.ubiquity-container-identifiers": [
+          "iCloud.$(CFBundleIdentifier)"
+        ],
+        "com.apple.developer.ubiquity-kvstore-identifier": "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+      },
       "infoPlist": {
         "NSUbiquitousContainers": {
           "iCloud.$(CFBundleIdentifier)": {
@@ -33,7 +44,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.MomentumFlow"
+      "package": "com.andrej.momentumflow"
     },
     "web": {
       "output": "static",
@@ -67,6 +78,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "622dbb96-204f-48e5-8a25-043078597fb1"
+      }
+    },
+    "owner": "ondryasha27"
   }
 }

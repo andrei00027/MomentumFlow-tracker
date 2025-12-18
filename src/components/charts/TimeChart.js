@@ -1,157 +1,137 @@
 // src/components/charts/TimeChart.js
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { BarChart } from 'react-native-chart-kit';
+import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/Colors';
+import Svg, { Path, Circle, Text as SvgText } from 'react-native-svg';
 
-const screenWidth = Dimensions.get('window').width;
+const CHART_COLOR = Colors.primary;
 
-const TimeChart = ({ completionHistory, habitName = 'Привычка' }) => {
-  // Обработка данных: группировка по часам
+const TimeChart = ({ completionHistory }) => {
+  const { t } = useTranslation();
+
   const chartData = useMemo(() => {
     if (!completionHistory || Object.keys(completionHistory).length === 0) {
       return null;
     }
 
-    // Создаем массив из 24 часов (0-23)
+    // Count completions by hour (0-23)
     const hourCounts = Array(24).fill(0);
+    let hasTimeData = false;
 
-    // Подсчитываем выполнения по часам
     Object.values(completionHistory).forEach(entry => {
       if (entry.completed && entry.timestamp) {
         const hour = new Date(entry.timestamp).getHours();
         hourCounts[hour]++;
+        hasTimeData = true;
       }
     });
 
-    // Формируем данные для графика (показываем только часы с активностью)
-    const labels = [];
-    const data = [];
+    if (!hasTimeData) return null;
 
-    hourCounts.forEach((count, hour) => {
-      if (count > 0) {
-        labels.push(`${hour}:00`);
-        data.push(count);
-      }
-    });
-
-    // Если нет данных с временем выполнения
-    if (data.length === 0) {
-      return null;
-    }
+    const maxCount = Math.max(...hourCounts, 1);
 
     return {
-      labels,
-      datasets: [
-        {
-          data,
-        },
-      ],
+      hourCounts,
+      maxCount,
     };
   }, [completionHistory]);
 
   if (!chartData) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Недостаточно данных для графика</Text>
-        <Text style={styles.emptySubtext}>
-          Выполняйте привычку, чтобы увидеть статистику по времени
-        </Text>
-      </View>
-    );
+    return null;
   }
+
+  const chartWidth = 140;
+  const chartHeight = 70;
+  const padding = 10;
+
+  // Create smooth curve path
+  const createPath = () => {
+    const points = chartData.hourCounts.map((count, hour) => {
+      const x = padding + (hour / 23) * (chartWidth - 2 * padding);
+      const y = chartHeight - padding - (count / chartData.maxCount) * (chartHeight - 2 * padding);
+      return { x, y, count };
+    });
+
+    if (points.length < 2) return '';
+
+    // Create smooth bezier curve
+    let path = `M ${points[0].x} ${points[0].y}`;
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const current = points[i];
+      const next = points[i + 1];
+      const midX = (current.x + next.x) / 2;
+
+      path += ` Q ${current.x} ${current.y} ${midX} ${(current.y + next.y) / 2}`;
+    }
+
+    const lastPoint = points[points.length - 1];
+    path += ` L ${lastPoint.x} ${lastPoint.y}`;
+
+    return path;
+  };
+
+  // Find peak hours for dots
+  const peakHours = chartData.hourCounts
+    .map((count, hour) => ({ count, hour }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3)
+    .filter(p => p.count > 0);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Время выполнения: {habitName}</Text>
-      <Text style={styles.subtitle}>Количество выполнений по часам</Text>
-
-      <BarChart
-        data={chartData}
-        width={screenWidth - 40}
-        height={220}
-        yAxisLabel=""
-        yAxisSuffix=""
-        chartConfig={{
-          backgroundColor: Colors.background,
-          backgroundGradientFrom: Colors.primary,
-          backgroundGradientTo: Colors.secondary,
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-          propsForLabels: {
-            fontSize: 10,
-          },
-          propsForBackgroundLines: {
-            strokeDasharray: '',
-            strokeWidth: 1,
-            stroke: 'rgba(255,255,255,0.1)',
-          },
-        }}
-        style={styles.chart}
-        fromZero
-        showBarTops={false}
-        withInnerLines={true}
-        segments={4}
-      />
+      <Svg width={chartWidth} height={chartHeight + 20}>
+        <Path
+          d={createPath()}
+          fill="none"
+          stroke={CHART_COLOR}
+          strokeWidth={2}
+        />
+        {peakHours.map((peak, index) => {
+          const x = padding + (peak.hour / 23) * (chartWidth - 2 * padding);
+          const y = chartHeight - padding - (peak.count / chartData.maxCount) * (chartHeight - 2 * padding);
+          return (
+            <Circle
+              key={index}
+              cx={x}
+              cy={y}
+              r={3}
+              fill={CHART_COLOR}
+            />
+          );
+        })}
+        {/* Time labels */}
+        <SvgText
+          x={padding + (6 / 23) * (chartWidth - 2 * padding)}
+          y={chartHeight + 14}
+          fontSize={10}
+          fill={Colors.textSecondary}
+          textAnchor="middle"
+          fontWeight="700"
+        >
+          6 AM
+        </SvgText>
+        <SvgText
+          x={padding + (18 / 23) * (chartWidth - 2 * padding)}
+          y={chartHeight + 14}
+          fontSize={10}
+          fill={Colors.textSecondary}
+          textAnchor="middle"
+          fontWeight="700"
+        >
+          6 PM
+        </SvgText>
+      </Svg>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 16,
-    marginVertical: 8,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-    marginBottom: 16,
-  },
-  chart: {
-    marginVertical: 8,
-    borderRadius: 16,
-  },
-  emptyContainer: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 32,
-    marginVertical: 8,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  emptyText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.text,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-    textAlign: 'center',
   },
 });
 

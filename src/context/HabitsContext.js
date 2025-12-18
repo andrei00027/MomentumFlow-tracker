@@ -1,5 +1,6 @@
 // src/context/HabitsContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AsyncStorageService } from '@/src/services/storage/AsyncStorageService';
 import NotificationService from '@/src/services/notifications/NotificationService';
 import CloudStorageService from '@/src/services/storage/CloudStorageService';
@@ -7,11 +8,11 @@ import AppleHealthService from '@/src/services/health/AppleHealthService';
 
 const HabitsContext = createContext();
 
-// Моковые данные для тестирования
-const mockHabits = [
+// Функция для получения локализованных моковых данных
+const getMockHabits = (t) => [
   {
     id: '1',
-    name: 'Утренняя медитация',
+    name: t('mockHabits.meditation'),
     icon: '🧘',
     type: 'binary',
     currentStreak: 5,
@@ -21,11 +22,11 @@ const mockHabits = [
   },
   {
     id: '2',
-    name: 'Выпить 8 стаканов воды',
+    name: t('mockHabits.water'),
     icon: '💧',
     type: 'counter',
     targetValue: 8,
-    unit: 'стаканов',
+    unit: t('mockHabits.glasses'),
     currentStreak: 3,
     bestStreak: 7,
     completionHistory: {},
@@ -33,7 +34,7 @@ const mockHabits = [
   },
   {
     id: '3',
-    name: 'Тренировка',
+    name: t('mockHabits.workout'),
     icon: '💪',
     type: 'binary',
     currentStreak: 2,
@@ -43,7 +44,7 @@ const mockHabits = [
   },
   {
     id: '4',
-    name: 'Чтение книги',
+    name: t('mockHabits.reading'),
     icon: '📚',
     type: 'binary',
     currentStreak: 8,
@@ -54,6 +55,7 @@ const mockHabits = [
 ];
 
 export const HabitsProvider = ({ children }) => {
+  const { t } = useTranslation();
   const [habits, setHabits] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -91,7 +93,7 @@ export const HabitsProvider = ({ children }) => {
   const loadHabitsFromStorage = async () => {
     const loadedHabits = await AsyncStorageService.loadHabits();
     // Если нет сохраненных привычек, используем моковые данные
-    setHabits(loadedHabits.length > 0 ? loadedHabits : mockHabits);
+    setHabits(loadedHabits.length > 0 ? loadedHabits : getMockHabits(t));
     setIsLoaded(true);
   };
 
@@ -190,7 +192,17 @@ export const HabitsProvider = ({ children }) => {
         }
       };
 
-      // Пересчитать streak (упрощенная версия)
+      // Для quit habit: отметка = слип, сбрасываем streak
+      if (habit.isQuitHabit) {
+        return {
+          ...habit,
+          completionHistory: newHistory,
+          currentStreak: 0,
+          lastSlipDate: today,
+        };
+      }
+
+      // Обычная привычка: увеличиваем streak
       const newStreak = habit.currentStreak + 1;
       const newBestStreak = Math.max(newStreak, habit.bestStreak);
 
@@ -213,12 +225,64 @@ export const HabitsProvider = ({ children }) => {
       const newHistory = { ...habit.completionHistory };
       delete newHistory[today];
 
+      // Для quit habit: пересчитываем streak с последнего слипа
+      if (habit.isQuitHabit) {
+        const newStreak = calculateQuitHabitStreak(newHistory, habit.createdAt);
+        const lastSlip = findLastSlipDate(newHistory);
+        return {
+          ...habit,
+          completionHistory: newHistory,
+          currentStreak: newStreak,
+          lastSlipDate: lastSlip,
+          bestStreak: Math.max(newStreak, habit.bestStreak || 0),
+        };
+      }
+
       return {
         ...habit,
         completionHistory: newHistory,
         currentStreak: Math.max(0, habit.currentStreak - 1),
       };
     }));
+  };
+
+  // Рассчитать streak для quit habit (дни без слипов)
+  const calculateQuitHabitStreak = (completionHistory, createdAt) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Найти последний слип (последнюю отметку)
+    const slipDates = Object.keys(completionHistory)
+      .filter(date => completionHistory[date]?.completed)
+      .sort()
+      .reverse();
+
+    if (slipDates.length === 0) {
+      // Нет слипов — считаем дни с момента создания
+      const created = new Date(createdAt);
+      created.setHours(0, 0, 0, 0);
+      return Math.floor((today - created) / (1000 * 60 * 60 * 24));
+    }
+
+    // Есть слипы — считаем дни с последнего слипа
+    const lastSlip = new Date(slipDates[0]);
+    lastSlip.setHours(0, 0, 0, 0);
+    return Math.floor((today - lastSlip) / (1000 * 60 * 60 * 24));
+  };
+
+  // Найти дату последнего слипа
+  const findLastSlipDate = (completionHistory) => {
+    const slipDates = Object.keys(completionHistory)
+      .filter(date => completionHistory[date]?.completed)
+      .sort()
+      .reverse();
+    return slipDates.length > 0 ? slipDates[0] : null;
+  };
+
+  // Получить текущий streak для quit habit
+  const getQuitHabitStreak = (habit) => {
+    if (!habit.isQuitHabit) return habit.currentStreak;
+    return calculateQuitHabitStreak(habit.completionHistory || {}, habit.createdAt);
   };
 
   // Проверить выполнена ли привычка сегодня
@@ -228,6 +292,21 @@ export const HabitsProvider = ({ children }) => {
 
     const today = new Date().toISOString().split('T')[0];
     return habit.completionHistory[today]?.completed || false;
+  };
+
+  // Проверить запланирована ли привычка на сегодня
+  const isScheduledForToday = (habit) => {
+    if (!habit) return false;
+    // Если everyDay === true или нет selectedDays — привычка на каждый день
+    if (habit.everyDay === true || !habit.selectedDays) return true;
+    // getDay() возвращает 0 для воскресенья, 1 для понедельника и т.д.
+    const todayDayOfWeek = new Date().getDay();
+    return habit.selectedDays.includes(todayDayOfWeek);
+  };
+
+  // Получить привычки, запланированные на сегодня
+  const getHabitsForToday = () => {
+    return habits.filter(isScheduledForToday);
   };
 
   // Перезагрузить привычки (полезно после очистки данных)
@@ -319,6 +398,9 @@ export const HabitsProvider = ({ children }) => {
     completeHabit,
     uncompleteHabit,
     isCompletedToday,
+    isScheduledForToday,
+    getHabitsForToday,
+    getQuitHabitStreak,
     reloadHabits,
     syncWithCloud,
     isSyncing,

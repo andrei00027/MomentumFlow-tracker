@@ -3,6 +3,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import { AsyncStorageService } from '../services/storage/AsyncStorageService';
 
 const AuthContext = createContext();
 
@@ -98,11 +99,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const deleteAccount = async () => {
+    try {
+      // Удалить все данные привычек из AsyncStorage
+      await AsyncStorageService.clearAll();
+      // Удалить данные пользователя из SecureStore
+      await SecureStore.deleteItemAsync(USER_KEY);
+      // Сбросить состояние пользователя (перенаправит на экран входа)
+      setUser(null);
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     isLoading,
     signInWithApple,
     signOut,
+    deleteAccount,
     isAuthenticated: !!user,
   };
 

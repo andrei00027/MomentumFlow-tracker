@@ -2,11 +2,14 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/Colors';
 
 const screenWidth = Dimensions.get('window').width;
 
-const StreakChart = ({ completionHistory, habitName = 'Привычка' }) => {
+const StreakChart = ({ completionHistory, habitName }) => {
+  const { t } = useTranslation();
+  const displayName = habitName || t('charts.habit');
   // Обработка данных: показываем динамику streak за последние 30 дней
   const chartData = useMemo(() => {
     if (!completionHistory || Object.keys(completionHistory).length === 0) {
@@ -67,9 +70,9 @@ const StreakChart = ({ completionHistory, habitName = 'Привычка' }) => {
   if (!chartData) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Недостаточно данных для графика</Text>
+        <Text style={styles.emptyText}>{t('charts.noData')}</Text>
         <Text style={styles.emptySubtext}>
-          Выполняйте привычку регулярно, чтобы увидеть динамику streak
+          {t('charts.noDataStreakHint')}
         </Text>
       </View>
     );
@@ -77,8 +80,8 @@ const StreakChart = ({ completionHistory, habitName = 'Привычка' }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Динамика streak: {habitName}</Text>
-      <Text style={styles.subtitle}>История последовательности за 30 дней</Text>
+      <Text style={styles.title}>{t('charts.streakDynamics')}: {displayName}</Text>
+      <Text style={styles.subtitle}>{t('charts.streakHistory')}</Text>
 
       <LineChart
         data={chartData}

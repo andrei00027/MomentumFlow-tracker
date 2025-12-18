@@ -16,7 +16,7 @@ export const Toast: React.FC<ToastProps> = ({
   type = 'info',
   visible,
   onHide,
-  duration = 3000
+  duration = 1000
 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-100)).current;
@@ -66,7 +66,7 @@ export const Toast: React.FC<ToastProps> = ({
     }
   }, [visible, duration, fadeAnim, translateY, onHide]);
 
-  if (!visible && fadeAnim._value === 0) {
+  if (!visible) {
     return null;
   }
 
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   message: {
     flex: 1,
-    fontSize: Sizes.fontSize.md,
+    fontSize: Sizes.fontSize.lg,
     fontWeight: Sizes.fontWeight.medium,
     color: Colors.surface,
   },

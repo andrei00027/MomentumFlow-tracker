@@ -1,41 +1,37 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Platform } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Platform, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import Icon from 'react-native-remix-icon';
 import { Colors, Sizes } from '@/src/constants';
 import { useHabits } from '@/src/context/HabitsContext';
 import { useAuth } from '@/src/context/AuthContext';
-import { AsyncStorageService } from '@/src/services/storage/AsyncStorageService';
-import { useMemo } from 'react';
+import { SUPPORTED_LANGUAGES, changeLanguage, LanguageCode } from '@/src/i18n';
 
 export default function ProfileScreen() {
-  const { t } = useTranslation();
-  const { habits, reloadHabits, syncWithCloud, isSyncing, lastSyncTime, checkHealthKitGoals } = useHabits();
-  const { user, signOut } = useAuth();
+  const { t, i18n } = useTranslation();
+  const { syncWithCloud, isSyncing, lastSyncTime, checkHealthKitGoals } = useHabits();
+  const { user, signOut, deleteAccount } = useAuth();
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
-  // Общая статистика пользователя
-  const userStats = useMemo(() => {
-    const totalHabits = habits.length;
-    const totalStreak = habits.reduce((sum, h) => sum + h.currentStreak, 0);
-    const bestStreak = Math.max(...habits.map(h => h.bestStreak), 0);
+  const handleLanguageChange = async (langCode: LanguageCode) => {
+    try {
+      await changeLanguage(langCode);
+      setLanguageModalVisible(false);
+    } catch {
+      Alert.alert(t('common.error'), t('errors.generic'));
+    }
+  };
 
-    // Подсчет общего количества выполнений
-    let totalCompletions = 0;
-    habits.forEach(habit => {
-      totalCompletions += Object.keys(habit.completionHistory || {}).length;
-    });
+  const getCurrentLanguageName = () => {
+    const currentLang = SUPPORTED_LANGUAGES.find(lang => lang.code === i18n.language);
+    return currentLang?.nativeName || 'English';
+  };
 
-    return {
-      totalHabits,
-      totalStreak,
-      bestStreak,
-      totalCompletions,
-    };
-  }, [habits]);
-
-  const handleClearData = () => {
+  const handleDeleteAccount = () => {
     Alert.alert(
-      t('profile.clearData'),
-      t('profile.clearDataConfirm'),
+      t('profile.deleteAccount'),
+      t('profile.deleteAccountConfirm'),
       [
         {
           text: t('common.cancel'),
@@ -46,13 +42,9 @@ export default function ProfileScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              // Сначала очистить AsyncStorage
-              await AsyncStorageService.clearAll();
-              // Затем перезагрузить привычки (загрузятся моковые данные)
-              await reloadHabits();
-              Alert.alert(t('common.success'), t('profile.clearDataSuccess'));
+              await deleteAccount();
             } catch {
-              Alert.alert(t('common.error'), t('errors.storage'));
+              Alert.alert(t('common.error'), t('errors.generic'));
             }
           },
         },
@@ -152,38 +144,28 @@ export default function ProfileScreen() {
         {/* Аватар и имя */}
         <View style={styles.profileSection}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarEmoji}>👤</Text>
+            <Icon name="user-3-fill" size={48} color={Colors.primary} />
           </View>
           <Text style={styles.username}>{user?.fullName || user?.email || t('profile.user')}</Text>
           {user?.email && <Text style={styles.userEmail}>{user.email}</Text>}
         </View>
 
-        {/* Статистика пользователя */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('profile.statistics')}</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statBox}>
-              <Text style={styles.statValue}>{userStats.totalHabits}</Text>
-              <Text style={styles.statLabel}>{t('profile.totalHabitsLabel')}</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statValue}>{userStats.totalCompletions}</Text>
-              <Text style={styles.statLabel}>{t('profile.totalCompletionsLabel')}</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statValue}>{userStats.totalStreak}</Text>
-              <Text style={styles.statLabel}>{t('profile.totalStreakLabel')}</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statValue}>{userStats.bestStreak}</Text>
-              <Text style={styles.statLabel}>{t('profile.bestStreakLabel')}</Text>
-            </View>
-          </View>
-        </View>
-
         {/* Настройки */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('profile.settings')}</Text>
+
+          {/* Выбор языка */}
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => setLanguageModalVisible(true)}
+          >
+            <Icon name="global-fill" size={24} color={Colors.primary} style={{ marginRight: Sizes.spacing.md }} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.settingText}>{t('profile.language')}</Text>
+              <Text style={styles.settingSubtext}>{getCurrentLanguageName()}</Text>
+            </View>
+            <Text style={styles.settingArrow}>›</Text>
+          </TouchableOpacity>
 
           {/* iCloud синхронизация */}
           {Platform.OS === 'ios' && (
@@ -192,7 +174,7 @@ export default function ProfileScreen() {
               onPress={handleSync}
               disabled={isSyncing}
             >
-              <Text style={styles.settingIcon}>☁️</Text>
+              <Icon name="cloud-fill" size={24} color={Colors.primary} style={{ marginRight: Sizes.spacing.md }} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.settingText}>{t('profile.syncWithICloud')}</Text>
                 <Text style={styles.settingSubtext}>
@@ -213,7 +195,7 @@ export default function ProfileScreen() {
               style={styles.settingItem}
               onPress={handleCheckHealthGoals}
             >
-              <Text style={styles.settingIcon}>❤️</Text>
+              <Icon name="heart-pulse-fill" size={24} color={Colors.error} style={{ marginRight: Sizes.spacing.md }} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.settingText}>{t('profile.health')}</Text>
                 <Text style={styles.settingSubtext}>
@@ -225,19 +207,19 @@ export default function ProfileScreen() {
           )}
 
           <TouchableOpacity style={styles.settingItem} onPress={handleAbout}>
-            <Text style={styles.settingIcon}>ℹ️</Text>
+            <Icon name="information-fill" size={24} color={Colors.primary} style={{ marginRight: Sizes.spacing.md }} />
             <Text style={styles.settingText}>{t('profile.about')}</Text>
             <Text style={styles.settingArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.settingItem} onPress={handleClearData}>
-            <Text style={styles.settingIcon}>🗑️</Text>
-            <Text style={[styles.settingText, styles.settingTextDanger]}>{t('profile.clearData')}</Text>
+          <TouchableOpacity style={styles.settingItem} onPress={handleDeleteAccount}>
+            <Icon name="delete-bin-fill" size={24} color={Colors.error} style={{ marginRight: Sizes.spacing.md }} />
+            <Text style={[styles.settingText, styles.settingTextDanger]}>{t('profile.deleteAccount')}</Text>
             <Text style={styles.settingArrow}>›</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.settingItem} onPress={handleSignOut}>
-            <Text style={styles.settingIcon}>🚪</Text>
+            <Icon name="logout-box-r-fill" size={24} color={Colors.error} style={{ marginRight: Sizes.spacing.md }} />
             <Text style={[styles.settingText, styles.settingTextDanger]}>{t('profile.signOut')}</Text>
             <Text style={styles.settingArrow}>›</Text>
           </TouchableOpacity>
@@ -249,6 +231,51 @@ export default function ProfileScreen() {
           <Text style={styles.footerSubtext}>{t('profile.madeWithLove')}</Text>
         </View>
       </ScrollView>
+
+      {/* Language Selection Modal */}
+      <Modal
+        visible={languageModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setLanguageModalVisible(false)}
+        >
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{t('profile.selectLanguage')}</Text>
+            {SUPPORTED_LANGUAGES.map((lang) => (
+              <TouchableOpacity
+                key={lang.code}
+                style={[
+                  styles.languageOption,
+                  i18n.language === lang.code && styles.languageOptionSelected,
+                ]}
+                onPress={() => handleLanguageChange(lang.code)}
+              >
+                <Text
+                  style={[
+                    styles.languageOptionText,
+                    i18n.language === lang.code && styles.languageOptionTextSelected,
+                  ]}
+                >
+                  {lang.nativeName}
+                </Text>
+                {i18n.language === lang.code && (
+                  <Icon name="check-line" size={20} color={Colors.primary} />
+                )}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.modalCloseButton}
+              onPress={() => setLanguageModalVisible(false)}
+            >
+              <Text style={styles.modalCloseButtonText}>{t('common.cancel')}</Text>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -283,9 +310,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: Sizes.spacing.md,
   },
-  avatarEmoji: {
-    fontSize: 48,
-  },
   username: {
     fontSize: Sizes.fontSize.xl,
     fontWeight: 'bold',
@@ -305,30 +329,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginBottom: Sizes.spacing.md,
   },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Sizes.spacing.md,
-  },
-  statBox: {
-    flex: 1,
-    minWidth: '45%',
-    backgroundColor: Colors.surface,
-    padding: Sizes.spacing.lg,
-    borderRadius: Sizes.borderRadius.lg,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: Sizes.fontSize.xxxl,
-    fontWeight: 'bold',
-    color: Colors.primary,
-    marginBottom: Sizes.spacing.xs,
-  },
-  statLabel: {
-    fontSize: Sizes.fontSize.sm,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-  },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -336,10 +336,6 @@ const styles = StyleSheet.create({
     padding: Sizes.spacing.md,
     borderRadius: Sizes.borderRadius.lg,
     marginBottom: Sizes.spacing.sm,
-  },
-  settingIcon: {
-    fontSize: 24,
-    marginRight: Sizes.spacing.md,
   },
   settingText: {
     flex: 1,
@@ -371,5 +367,56 @@ const styles = StyleSheet.create({
   footerSubtext: {
     fontSize: Sizes.fontSize.sm,
     color: Colors.textDisabled,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Sizes.spacing.lg,
+  },
+  modalContent: {
+    backgroundColor: Colors.surface,
+    borderRadius: Sizes.borderRadius.xl,
+    padding: Sizes.spacing.lg,
+    width: '100%',
+    maxWidth: 340,
+  },
+  modalTitle: {
+    fontSize: Sizes.fontSize.xl,
+    fontWeight: 'bold',
+    color: Colors.text,
+    textAlign: 'center',
+    marginBottom: Sizes.spacing.lg,
+  },
+  languageOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: Sizes.spacing.md,
+    paddingHorizontal: Sizes.spacing.md,
+    borderRadius: Sizes.borderRadius.md,
+    marginBottom: Sizes.spacing.xs,
+  },
+  languageOptionSelected: {
+    backgroundColor: Colors.primary + '15',
+  },
+  languageOptionText: {
+    fontSize: Sizes.fontSize.lg,
+    color: Colors.text,
+  },
+  languageOptionTextSelected: {
+    color: Colors.primary,
+    fontWeight: '600',
+  },
+  modalCloseButton: {
+    marginTop: Sizes.spacing.md,
+    paddingVertical: Sizes.spacing.md,
+    alignItems: 'center',
+  },
+  modalCloseButtonText: {
+    fontSize: Sizes.fontSize.md,
+    color: Colors.textSecondary,
+    fontWeight: '600',
   },
 });
