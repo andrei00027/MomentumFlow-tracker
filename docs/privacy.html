@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - MomentumFlow</title>
+    <style>
+        :root {
+            --primary: #3949AB;
+            --accent: #26C6DA;
+            --text: #212121;
+            --text-secondary: #757575;
+            --background: #F5F5F5;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: var(--white);
+            min-height: 100vh;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #E0E0E0;
+            margin: 30px 0;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+        }
+
+        h3 {
+            color: var(--text);
+            font-size: 1.15rem;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: var(--text);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        th {
+            background: var(--background);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        .highlight {
+            background: #E8EAF6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .language-switch {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 15px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .language-switch a {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .language-switch a:hover {
+            opacity: 0.9;
+        }
+
+        .language-switch a.active {
+            background: var(--accent);
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #E0E0E0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .section-ru {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Back to App</a>
+
+        <div class="language-switch">
+            <a href="#" onclick="showEnglish(); return false;" id="btn-en" class="active">English</a>
+            <a href="#" onclick="showRussian(); return false;" id="btn-ru">Русский</a>
+        </div>
+
+        <!-- English Version -->
+        <div id="section-en" class="section-en">
+            <h1>Privacy Policy</h1>
+            <p class="last-updated"><strong>Last Updated:</strong> December 19, 2025</p>
+
+            <hr class="divider">
+
+            <h2>1. Definitions</h2>
+            <p>For the purposes of this Privacy Policy:</p>
+            <ul>
+                <li><strong>"App"</strong> or <strong>"Application"</strong> refers to MomentumFlow, the habit tracking mobile application.</li>
+                <li><strong>"Company"</strong> (referred to as either "the Company", "We", "Us" or "Our") refers to MomentumFlow.</li>
+                <li><strong>"Device"</strong> means any device that can access the Application such as an iPhone, iPad, or Apple Watch.</li>
+                <li><strong>"Personal Data"</strong> means any information that relates to an identified or identifiable individual.</li>
+                <li><strong>"Service"</strong> refers to the Application and all features provided within it.</li>
+                <li><strong>"User"</strong> (referred to as either "You", "Your" or "Yours") means the individual accessing or using the Application.</li>
+                <li><strong>"Health Data"</strong> means any data accessed from Apple Health, including but not limited to workouts, steps, sleep, and activity data.</li>
+                <li><strong>"Habit Data"</strong> means information about your habits, including names, icons, completion history, streaks, and settings.</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>2. Introduction</h2>
+            <p>MomentumFlow is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, and protect your information when you use our habit tracking application.</p>
+            <div class="highlight">
+                <p>We operate on a <strong>local-first architecture</strong> principle, meaning your data is primarily stored on your device, and we have no access to it. This policy describes our minimal data practices and your rights regarding your personal information.</p>
+            </div>
+
+            <hr class="divider">
+
+            <h2>3. Information We Collect</h2>
+
+            <h3>3.1 Information You Provide</h3>
+            <ul>
+                <li><strong>Account Information:</strong> When you sign in with Apple ID, we receive your name and email address (if you choose to share it). Apple may provide a private relay email that protects your real email address.</li>
+                <li><strong>Habit Data:</strong> Information about your habits that you create and manage, including:
+                    <ul>
+                        <li>Habit names, icons, and colors</li>
+                        <li>Completion history and timestamps</li>
+                        <li>Streak data and statistics</li>
+                        <li>Reminder settings and preferences</li>
+                        <li>Frequency configurations</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>3.2 Health Data (Optional)</h3>
+            <p>If you grant permission, we access read-only data from Apple Health:</p>
+            <ul>
+                <li>Workout sessions</li>
+                <li>Step counts</li>
+                <li>Sleep analysis</li>
+                <li>Active energy burned</li>
+            </ul>
+            <p>This data is used solely to automatically mark relevant habits as complete.</p>
+
+            <h3>3.3 Automatically Collected Information</h3>
+            <ul>
+                <li><strong>Device Information:</strong> iOS version, device type, and language settings for app functionality and localization.</li>
+                <li><strong>Usage Analytics:</strong> Anonymous, aggregated usage patterns stored locally on your device. This data never leaves your device.</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>4. How We Use Your Information</h2>
+            <p>We use the collected information to:</p>
+            <ul>
+                <li>Provide and maintain the habit tracking Service</li>
+                <li>Calculate streaks and completion statistics</li>
+                <li>Sync your data across your Apple devices via iCloud (if enabled)</li>
+                <li>Automatically complete habits based on Apple Health data (if enabled)</li>
+                <li>Send local reminder notifications at your scheduled times</li>
+                <li>Display personalized statistics and progress charts</li>
+                <li>Improve app performance and user experience</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>5. Third-Party Services</h2>
+
+            <h3>5.1 Apple Services</h3>
+            <p>We integrate with the following Apple services:</p>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Purpose</th>
+                    <th>Data Shared</th>
+                </tr>
+                <tr>
+                    <td>Sign in with Apple</td>
+                    <td>Authentication</td>
+                    <td>Name, email (optional)</td>
+                </tr>
+                <tr>
+                    <td>iCloud</td>
+                    <td>Data synchronization</td>
+                    <td>Habit data (encrypted)</td>
+                </tr>
+                <tr>
+                    <td>Apple Health</td>
+                    <td>Auto-completion</td>
+                    <td>Read-only health data</td>
+                </tr>
+                <tr>
+                    <td>Push Notifications</td>
+                    <td>Reminders</td>
+                    <td>Local only, no data transmitted</td>
+                </tr>
+            </table>
+
+            <h3>5.2 Third-Party Data Handling</h3>
+            <ul>
+                <li><strong>Sign in with Apple:</strong> Authentication is handled entirely by Apple. See <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
+                <li><strong>iCloud:</strong> Your synced data is stored in your private iCloud container. We cannot access it. See <a href="https://support.apple.com/en-us/HT202303">iCloud Privacy</a>.</li>
+                <li><strong>Apple Health:</strong> Data is only read locally and never transmitted to any server.</li>
+            </ul>
+
+            <h3>5.3 No Other Third-Party Services</h3>
+            <p>We do not use:</p>
+            <ul>
+                <li>Third-party analytics services</li>
+                <li>Advertising networks</li>
+                <li>Social media tracking pixels</li>
+                <li>Any external data processors</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>6. Data Storage and Security</h2>
+
+            <h3>6.1 Local Storage</h3>
+            <ul>
+                <li>All habit data is stored locally on your device using secure iOS storage mechanisms</li>
+                <li>Apple ID authentication tokens are stored in iOS Keychain (hardware-encrypted)</li>
+                <li>No sensitive data is stored in plain text</li>
+            </ul>
+
+            <h3>6.2 iCloud Synchronization</h3>
+            <p>If you enable iCloud sync:</p>
+            <ul>
+                <li>Your data is encrypted in transit and at rest</li>
+                <li>Data is stored in your private CloudKit container</li>
+                <li>Only your Apple ID can access this data</li>
+                <li>We have no access to your iCloud data</li>
+            </ul>
+
+            <h3>6.3 Security Measures</h3>
+            <p>We implement the following security measures:</p>
+            <ul>
+                <li>iOS Keychain for sensitive credentials</li>
+                <li>End-to-end encryption for iCloud sync</li>
+                <li>No server-side data storage (local-first architecture)</li>
+                <li>Regular security updates and code reviews</li>
+                <li>Compliance with Apple's security guidelines</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>7. Data Sharing</h2>
+            <div class="highlight">
+                <p><strong>We do not sell, rent, trade, or share your personal information with third parties.</strong></p>
+            </div>
+            <p>Data sharing only occurs through:</p>
+            <ul>
+                <li><strong>iCloud:</strong> Your data syncs to your personal iCloud account (controlled by you)</li>
+                <li><strong>Apple:</strong> Authentication via Sign in with Apple (covered by Apple's privacy policy)</li>
+            </ul>
+            <p>We may disclose information if required by law or to protect our legal rights.</p>
+
+            <hr class="divider">
+
+            <h2>8. User Rights</h2>
+            <p>You have the following rights regarding your data:</p>
+
+            <h3>8.1 Access</h3>
+            <ul>
+                <li>View all your habit data within the app at any time</li>
+                <li>Export your data in a portable format (contact support)</li>
+            </ul>
+
+            <h3>8.2 Correction</h3>
+            <ul>
+                <li>Edit any habit information directly in the app</li>
+                <li>Update your profile settings at any time</li>
+            </ul>
+
+            <h3>8.3 Deletion</h3>
+            <ul>
+                <li>Delete individual habits instantly</li>
+                <li>Delete all data by removing the app</li>
+                <li>Request complete account deletion (contact support)</li>
+            </ul>
+
+            <h3>8.4 Opt-Out</h3>
+            <ul>
+                <li>Disable iCloud synchronization in app settings</li>
+                <li>Revoke Apple Health permissions in iOS Settings</li>
+                <li>Disable notifications at any time</li>
+            </ul>
+
+            <h3>8.5 Data Portability</h3>
+            <ul>
+                <li>Request a copy of all your data by contacting support</li>
+                <li>Data will be provided in a machine-readable format</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>9. Data Retention</h2>
+            <table>
+                <tr>
+                    <th>Data Type</th>
+                    <th>Retention Period</th>
+                </tr>
+                <tr>
+                    <td>Habit data</td>
+                    <td>Until you delete it or remove the app</td>
+                </tr>
+                <tr>
+                    <td>Completion history</td>
+                    <td>Until you delete it or remove the app</td>
+                </tr>
+                <tr>
+                    <td>iCloud backup</td>
+                    <td>Follows your iCloud retention settings</td>
+                </tr>
+                <tr>
+                    <td>Authentication tokens</td>
+                    <td>Until you sign out</td>
+                </tr>
+                <tr>
+                    <td>Local analytics</td>
+                    <td>90 days, then automatically deleted</td>
+                </tr>
+            </table>
+            <p>Removing the app from your device permanently deletes all local data.</p>
+
+            <hr class="divider">
+
+            <h2>10. Cookies and Tracking</h2>
+            <p>MomentumFlow is a mobile application and does not use cookies. We employ a <strong>minimal tracking approach</strong>:</p>
+            <ul>
+                <li>No third-party tracking</li>
+                <li>No advertising identifiers</li>
+                <li>No cross-app tracking</li>
+                <li>Local-only anonymous usage analytics</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>11. Children's Privacy</h2>
+            <p>MomentumFlow is rated 4+ and suitable for all ages. However:</p>
+            <ul>
+                <li>We do not knowingly collect personal information from children under 13 without parental consent</li>
+                <li>Users under 13 should use the app under parental supervision</li>
+                <li>If we discover we have collected data from a child under 13 without proper consent, we will delete it promptly</li>
+            </ul>
+            <p>If you believe your child has provided us with personal information, please contact us immediately.</p>
+
+            <hr class="divider">
+
+            <h2>12. International Data Transfers</h2>
+            <p>If you use MomentumFlow outside your country of residence:</p>
+            <ul>
+                <li>Your habit data remains on your device (local-first)</li>
+                <li>iCloud data may be stored in Apple's data centers in various locations</li>
+                <li>Apple manages international data transfers in compliance with applicable laws</li>
+            </ul>
+            <p>We do not independently transfer your data across borders.</p>
+
+            <hr class="divider">
+
+            <h2>13. Regional Privacy Rights</h2>
+
+            <h3>13.1 California Residents (CCPA)</h3>
+            <p>California residents have additional rights:</p>
+            <ul>
+                <li><strong>Right to Know:</strong> What personal information is collected</li>
+                <li><strong>Right to Delete:</strong> Request deletion of personal information</li>
+                <li><strong>Right to Opt-Out:</strong> We do not sell personal information</li>
+                <li><strong>Non-Discrimination:</strong> Equal service regardless of privacy choices</li>
+            </ul>
+
+            <h3>13.2 European Users (GDPR)</h3>
+            <p>For users in the European Economic Area:</p>
+            <ul>
+                <li><strong>Legal Basis:</strong> We process data based on your consent and contractual necessity</li>
+                <li><strong>Data Controller:</strong> You are the controller of your habit data; we are the processor for sync services</li>
+                <li><strong>Right to Access:</strong> Access all your data in the app</li>
+                <li><strong>Right to Erasure:</strong> Delete all data at any time</li>
+                <li><strong>Right to Rectification:</strong> Correct any inaccurate data</li>
+                <li><strong>Right to Portability:</strong> Receive your data in a structured format</li>
+                <li><strong>Right to Object:</strong> Object to data processing at any time</li>
+            </ul>
+
+            <h3>13.3 Russian Users (152-ФЗ)</h3>
+            <p>For users in the Russian Federation:</p>
+            <ul>
+                <li>Personal data is stored on your device (local storage)</li>
+                <li>iCloud data is managed according to Apple's data localization practices</li>
+                <li>You have the right to access, correct, and delete your personal data</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>14. Policy Changes</h2>
+            <p>We may update this Privacy Policy from time to time. Changes will be indicated by:</p>
+            <ul>
+                <li>Updating the "Last Updated" date at the top</li>
+                <li>Notifying you through the app for significant changes</li>
+                <li>Posting the new Privacy Policy on our website</li>
+            </ul>
+            <p>Your continued use of the Application after changes constitutes acceptance of the updated policy.</p>
+
+            <hr class="divider">
+
+            <h2>15. Contact Information</h2>
+            <p>If you have questions about this Privacy Policy or your data:</p>
+            <p><strong>Email:</strong> <a href="mailto:support@momentumflow.app">support@momentumflow.app</a><br>
+            <strong>In-App:</strong> Settings &rarr; Contact Support</p>
+            <p>We will respond to your inquiry within 30 days.</p>
+        </div>
+
+        <!-- Russian Version -->
+        <div id="section-ru" class="section-ru">
+            <h1>Политика Конфиденциальности</h1>
+            <p class="last-updated"><strong>Последнее обновление:</strong> 19 декабря 2025 года</p>
+
+            <hr class="divider">
+
+            <h2>1. Определения</h2>
+            <p>Для целей настоящей Политики конфиденциальности:</p>
+            <ul>
+                <li><strong>«Приложение»</strong> означает MomentumFlow, мобильное приложение для отслеживания привычек.</li>
+                <li><strong>«Компания»</strong> (также «мы», «нас» или «наш») означает MomentumFlow.</li>
+                <li><strong>«Устройство»</strong> означает любое устройство, на котором можно использовать Приложение: iPhone, iPad или Apple Watch.</li>
+                <li><strong>«Персональные данные»</strong> означают любую информацию, относящуюся к идентифицированному или идентифицируемому лицу.</li>
+                <li><strong>«Сервис»</strong> означает Приложение и все предоставляемые им функции.</li>
+                <li><strong>«Пользователь»</strong> (также «вы», «ваш» или «вам») означает лицо, использующее Приложение.</li>
+                <li><strong>«Данные здоровья»</strong> означают данные из Apple Health: тренировки, шаги, сон, активность.</li>
+                <li><strong>«Данные о привычках»</strong> означают информацию о ваших привычках: названия, иконки, историю выполнения, серии, настройки.</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>2. Введение</h2>
+            <p>MomentumFlow заботится о защите вашей конфиденциальности. Настоящая Политика объясняет, как мы собираем, используем, храним и защищаем вашу информацию при использовании приложения для отслеживания привычек.</p>
+            <div class="highlight">
+                <p>Мы следуем принципу <strong>«сначала локально»</strong>: ваши данные хранятся преимущественно на вашем устройстве, и мы не имеем к ним доступа. Эта политика описывает наши минимальные практики работы с данными и ваши права.</p>
+            </div>
+
+            <hr class="divider">
+
+            <h2>3. Какую информацию мы собираем</h2>
+
+            <h3>3.1 Информация, которую вы предоставляете</h3>
+            <ul>
+                <li><strong>Данные учётной записи:</strong> При входе через Apple ID мы получаем ваше имя и email (если вы решите им поделиться). Apple может предоставить приватный email-адрес для защиты вашего реального адреса.</li>
+                <li><strong>Данные о привычках:</strong> Информация о привычках, которые вы создаёте:
+                    <ul>
+                        <li>Названия, иконки и цвета привычек</li>
+                        <li>История выполнения и временные метки</li>
+                        <li>Данные о сериях и статистика</li>
+                        <li>Настройки напоминаний</li>
+                        <li>Конфигурации частоты</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>3.2 Данные здоровья (опционально)</h3>
+            <p>При вашем разрешении мы получаем доступ только для чтения к данным Apple Health:</p>
+            <ul>
+                <li>Тренировки</li>
+                <li>Количество шагов</li>
+                <li>Анализ сна</li>
+                <li>Активные калории</li>
+            </ul>
+            <p>Эти данные используются исключительно для автоматической отметки соответствующих привычек.</p>
+
+            <h3>3.3 Автоматически собираемая информация</h3>
+            <ul>
+                <li><strong>Информация об устройстве:</strong> Версия iOS, тип устройства и языковые настройки для работы приложения и локализации.</li>
+                <li><strong>Аналитика использования:</strong> Анонимные, агрегированные данные об использовании, хранящиеся локально на вашем устройстве. Эти данные никогда не покидают ваше устройство.</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>4. Как мы используем вашу информацию</h2>
+            <p>Мы используем собранную информацию для:</p>
+            <ul>
+                <li>Предоставления и поддержки сервиса отслеживания привычек</li>
+                <li>Расчёта серий и статистики выполнения</li>
+                <li>Синхронизации данных между вашими устройствами Apple через iCloud (если включено)</li>
+                <li>Автоматической отметки привычек на основе данных Apple Health (если включено)</li>
+                <li>Отправки локальных напоминаний в запланированное время</li>
+                <li>Отображения персонализированной статистики и графиков прогресса</li>
+                <li>Улучшения производительности и пользовательского опыта</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>5. Сторонние сервисы</h2>
+
+            <h3>5.1 Сервисы Apple</h3>
+            <p>Мы интегрируемся со следующими сервисами Apple:</p>
+            <table>
+                <tr>
+                    <th>Сервис</th>
+                    <th>Назначение</th>
+                    <th>Передаваемые данные</th>
+                </tr>
+                <tr>
+                    <td>Вход через Apple</td>
+                    <td>Аутентификация</td>
+                    <td>Имя, email (опционально)</td>
+                </tr>
+                <tr>
+                    <td>iCloud</td>
+                    <td>Синхронизация данных</td>
+                    <td>Данные о привычках (зашифрованные)</td>
+                </tr>
+                <tr>
+                    <td>Apple Health</td>
+                    <td>Автовыполнение</td>
+                    <td>Данные здоровья (только чтение)</td>
+                </tr>
+                <tr>
+                    <td>Push-уведомления</td>
+                    <td>Напоминания</td>
+                    <td>Только локально, без передачи</td>
+                </tr>
+            </table>
+
+            <h3>5.2 Обработка данных третьими сторонами</h3>
+            <ul>
+                <li><strong>Вход через Apple:</strong> Аутентификация полностью управляется Apple. См. <a href="https://www.apple.com/legal/privacy/">Политику конфиденциальности Apple</a>.</li>
+                <li><strong>iCloud:</strong> Синхронизированные данные хранятся в вашем личном контейнере iCloud. Мы не имеем к ним доступа. См. <a href="https://support.apple.com/ru-ru/HT202303">Конфиденциальность iCloud</a>.</li>
+                <li><strong>Apple Health:</strong> Данные читаются только локально и никогда не передаются на серверы.</li>
+            </ul>
+
+            <h3>5.3 Отсутствие других сторонних сервисов</h3>
+            <p>Мы не используем:</p>
+            <ul>
+                <li>Сторонние аналитические сервисы</li>
+                <li>Рекламные сети</li>
+                <li>Пиксели отслеживания социальных сетей</li>
+                <li>Внешние обработчики данных</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>6. Хранение и безопасность данных</h2>
+
+            <h3>6.1 Локальное хранение</h3>
+            <ul>
+                <li>Все данные о привычках хранятся локально на вашем устройстве с использованием безопасных механизмов iOS</li>
+                <li>Токены аутентификации Apple ID хранятся в iOS Keychain (аппаратное шифрование)</li>
+                <li>Конфиденциальные данные не хранятся в открытом виде</li>
+            </ul>
+
+            <h3>6.2 Синхронизация iCloud</h3>
+            <p>При включении синхронизации iCloud:</p>
+            <ul>
+                <li>Ваши данные шифруются при передаче и хранении</li>
+                <li>Данные хранятся в вашем личном контейнере CloudKit</li>
+                <li>Только ваш Apple ID может получить доступ к этим данным</li>
+                <li>Мы не имеем доступа к вашим данным в iCloud</li>
+            </ul>
+
+            <h3>6.3 Меры безопасности</h3>
+            <p>Мы применяем следующие меры безопасности:</p>
+            <ul>
+                <li>iOS Keychain для конфиденциальных учётных данных</li>
+                <li>Сквозное шифрование для синхронизации iCloud</li>
+                <li>Отсутствие серверного хранения данных (архитектура «сначала локально»)</li>
+                <li>Регулярные обновления безопасности и проверки кода</li>
+                <li>Соответствие рекомендациям Apple по безопасности</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>7. Передача данных</h2>
+            <div class="highlight">
+                <p><strong>Мы не продаём, не сдаём в аренду, не обмениваем и не передаём вашу персональную информацию третьим лицам.</strong></p>
+            </div>
+            <p>Передача данных происходит только через:</p>
+            <ul>
+                <li><strong>iCloud:</strong> Ваши данные синхронизируются с вашим личным iCloud (контролируется вами)</li>
+                <li><strong>Apple:</strong> Аутентификация через Вход с Apple (регулируется политикой Apple)</li>
+            </ul>
+            <p>Мы можем раскрыть информацию, если это требуется по закону или для защиты наших законных прав.</p>
+
+            <hr class="divider">
+
+            <h2>8. Права пользователя</h2>
+            <p>Вы имеете следующие права в отношении ваших данных:</p>
+
+            <h3>8.1 Доступ</h3>
+            <ul>
+                <li>Просмотр всех данных о привычках в приложении в любое время</li>
+                <li>Экспорт данных в переносимом формате (обратитесь в поддержку)</li>
+            </ul>
+
+            <h3>8.2 Исправление</h3>
+            <ul>
+                <li>Редактирование любой информации о привычках прямо в приложении</li>
+                <li>Обновление настроек профиля в любое время</li>
+            </ul>
+
+            <h3>8.3 Удаление</h3>
+            <ul>
+                <li>Мгновенное удаление отдельных привычек</li>
+                <li>Удаление всех данных путём удаления приложения</li>
+                <li>Запрос полного удаления аккаунта (обратитесь в поддержку)</li>
+            </ul>
+
+            <h3>8.4 Отказ</h3>
+            <ul>
+                <li>Отключение синхронизации iCloud в настройках приложения</li>
+                <li>Отзыв разрешений Apple Health в настройках iOS</li>
+                <li>Отключение уведомлений в любое время</li>
+            </ul>
+
+            <h3>8.5 Переносимость данных</h3>
+            <ul>
+                <li>Запрос копии всех ваших данных через поддержку</li>
+                <li>Данные предоставляются в машиночитаемом формате</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>9. Хранение данных</h2>
+            <table>
+                <tr>
+                    <th>Тип данных</th>
+                    <th>Срок хранения</th>
+                </tr>
+                <tr>
+                    <td>Данные о привычках</td>
+                    <td>До удаления вами или удаления приложения</td>
+                </tr>
+                <tr>
+                    <td>История выполнения</td>
+                    <td>До удаления вами или удаления приложения</td>
+                </tr>
+                <tr>
+                    <td>Резервная копия iCloud</td>
+                    <td>Согласно настройкам iCloud</td>
+                </tr>
+                <tr>
+                    <td>Токены аутентификации</td>
+                    <td>До выхода из аккаунта</td>
+                </tr>
+                <tr>
+                    <td>Локальная аналитика</td>
+                    <td>90 дней, затем автоматическое удаление</td>
+                </tr>
+            </table>
+            <p>Удаление приложения с устройства безвозвратно удаляет все локальные данные.</p>
+
+            <hr class="divider">
+
+            <h2>10. Файлы cookie и отслеживание</h2>
+            <p>MomentumFlow — мобильное приложение, не использующее файлы cookie. Мы придерживаемся <strong>минимального подхода к отслеживанию</strong>:</p>
+            <ul>
+                <li>Нет стороннего отслеживания</li>
+                <li>Нет рекламных идентификаторов</li>
+                <li>Нет межприложенческого отслеживания</li>
+                <li>Только локальная анонимная аналитика</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>11. Конфиденциальность детей</h2>
+            <p>MomentumFlow имеет рейтинг 4+ и подходит для всех возрастов. Однако:</p>
+            <ul>
+                <li>Мы сознательно не собираем персональную информацию детей младше 13 лет без согласия родителей</li>
+                <li>Пользователи младше 13 лет должны использовать приложение под присмотром родителей</li>
+                <li>Если мы обнаружим, что собрали данные ребёнка младше 13 лет без надлежащего согласия, мы незамедлительно удалим их</li>
+            </ul>
+            <p>Если вы считаете, что ваш ребёнок предоставил нам персональную информацию, немедленно свяжитесь с нами.</p>
+
+            <hr class="divider">
+
+            <h2>12. Международная передача данных</h2>
+            <p>Если вы используете MomentumFlow за пределами страны проживания:</p>
+            <ul>
+                <li>Данные о привычках остаются на вашем устройстве (локальное хранение)</li>
+                <li>Данные iCloud могут храниться в дата-центрах Apple в различных странах</li>
+                <li>Apple управляет международной передачей данных в соответствии с применимым законодательством</li>
+            </ul>
+            <p>Мы самостоятельно не осуществляем трансграничную передачу ваших данных.</p>
+
+            <hr class="divider">
+
+            <h2>13. Региональные права на конфиденциальность</h2>
+
+            <h3>13.1 Жители Калифорнии (CCPA)</h3>
+            <p>Жители Калифорнии имеют дополнительные права:</p>
+            <ul>
+                <li><strong>Право знать:</strong> Какая персональная информация собирается</li>
+                <li><strong>Право на удаление:</strong> Запросить удаление персональной информации</li>
+                <li><strong>Право на отказ:</strong> Мы не продаём персональную информацию</li>
+                <li><strong>Недискриминация:</strong> Равное обслуживание независимо от выбора конфиденциальности</li>
+            </ul>
+
+            <h3>13.2 Пользователи из Европы (GDPR)</h3>
+            <p>Для пользователей из Европейской экономической зоны:</p>
+            <ul>
+                <li><strong>Правовая основа:</strong> Мы обрабатываем данные на основании вашего согласия и договорной необходимости</li>
+                <li><strong>Контролёр данных:</strong> Вы являетесь контролёром данных о привычках; мы — обработчик для сервисов синхронизации</li>
+                <li><strong>Право на доступ:</strong> Доступ ко всем данным в приложении</li>
+                <li><strong>Право на удаление:</strong> Удаление всех данных в любое время</li>
+                <li><strong>Право на исправление:</strong> Исправление неточных данных</li>
+                <li><strong>Право на переносимость:</strong> Получение данных в структурированном формате</li>
+                <li><strong>Право на возражение:</strong> Возражение против обработки данных в любое время</li>
+            </ul>
+
+            <h3>13.3 Пользователи из России (152-ФЗ)</h3>
+            <p>Для пользователей из Российской Федерации:</p>
+            <ul>
+                <li>Персональные данные хранятся на вашем устройстве (локальное хранение)</li>
+                <li>Данные iCloud управляются в соответствии с практикой локализации данных Apple</li>
+                <li>Вы имеете право на доступ, исправление и удаление ваших персональных данных</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>14. Изменения политики</h2>
+            <p>Мы можем обновлять настоящую Политику конфиденциальности время от времени. Об изменениях будет сообщено:</p>
+            <ul>
+                <li>Обновлением даты «Последнее обновление» вверху документа</li>
+                <li>Уведомлением в приложении о существенных изменениях</li>
+                <li>Публикацией новой Политики на нашем сайте</li>
+            </ul>
+            <p>Продолжение использования Приложения после изменений означает принятие обновлённой политики.</p>
+
+            <hr class="divider">
+
+            <h2>15. Контактная информация</h2>
+            <p>Если у вас есть вопросы о настоящей Политике конфиденциальности или ваших данных:</p>
+            <p><strong>Email:</strong> <a href="mailto:support@momentumflow.app">support@momentumflow.app</a><br>
+            <strong>В приложении:</strong> Настройки &rarr; Связаться с поддержкой</p>
+            <p>Мы ответим на ваш запрос в течение 30 дней.</p>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 MomentumFlow. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function showEnglish() {
+            document.getElementById('section-en').style.display = 'block';
+            document.getElementById('section-ru').style.display = 'none';
+            document.getElementById('btn-en').classList.add('active');
+            document.getElementById('btn-ru').classList.remove('active');
+        }
+
+        function showRussian() {
+            document.getElementById('section-en').style.display = 'none';
+            document.getElementById('section-ru').style.display = 'block';
+            document.getElementById('btn-en').classList.remove('active');
+            document.getElementById('btn-ru').classList.add('active');
+        }
+    </script>
+</body>
+</html>

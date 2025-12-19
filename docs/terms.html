@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - MomentumFlow</title>
+    <style>
+        :root {
+            --primary: #3949AB;
+            --accent: #26C6DA;
+            --text: #212121;
+            --text-secondary: #757575;
+            --background: #F5F5F5;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: var(--white);
+            min-height: 100vh;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #E0E0E0;
+            margin: 30px 0;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+        }
+
+        h3 {
+            color: var(--text);
+            font-size: 1.15rem;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: var(--text);
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        .highlight {
+            background: #E8EAF6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .caps {
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .language-switch {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 15px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .language-switch a {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .language-switch a:hover {
+            opacity: 0.9;
+        }
+
+        .language-switch a.active {
+            background: var(--accent);
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #E0E0E0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .section-ru {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Back to App</a>
+
+        <div class="language-switch">
+            <a href="#" onclick="showEnglish(); return false;" id="btn-en" class="active">English</a>
+            <a href="#" onclick="showRussian(); return false;" id="btn-ru">Русский</a>
+        </div>
+
+        <!-- English Version -->
+        <div id="section-en" class="section-en">
+            <h1>Terms of Service</h1>
+            <p class="last-updated"><strong>Last Updated:</strong> December 19, 2025</p>
+
+            <hr class="divider">
+
+            <h2>1. Definitions</h2>
+            <p>For the purposes of these Terms of Service:</p>
+            <ul>
+                <li><strong>"App"</strong> or <strong>"Application"</strong> refers to MomentumFlow, the habit tracking mobile application.</li>
+                <li><strong>"Company"</strong> (referred to as either "the Company", "We", "Us" or "Our") refers to MomentumFlow.</li>
+                <li><strong>"Content"</strong> means any data, text, graphics, or other materials uploaded, downloaded from, or appearing on the Service.</li>
+                <li><strong>"Device"</strong> means any device that can access the Application such as an iPhone, iPad, or Apple Watch.</li>
+                <li><strong>"Service"</strong> refers to the Application and all features provided within it.</li>
+                <li><strong>"Terms"</strong> means these Terms of Service that form the entire agreement between You and the Company regarding the use of the Service.</li>
+                <li><strong>"User"</strong> (referred to as either "You", "Your" or "Yours") means the individual accessing or using the Application.</li>
+                <li><strong>"User Content"</strong> means any content, including habit data, that You create, upload, or store using the Service.</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>2. Agreement Acceptance</h2>
+            <div class="highlight">
+                <p>By downloading, installing, or using MomentumFlow, You agree to be bound by these Terms of Service. If You do not agree to these Terms, do not use the Application.</p>
+            </div>
+            <p>These Terms constitute a legally binding agreement between You and the Company. By accessing or using the Service, You confirm that:</p>
+            <ul>
+                <li>You have read and understood these Terms</li>
+                <li>You agree to be bound by these Terms</li>
+                <li>You are legally capable of entering into binding contracts</li>
+                <li>You are not barred from using the Service under applicable law</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>3. Service Description</h2>
+            <p>MomentumFlow is a habit tracking application designed to help users build and maintain positive habits. The Service includes:</p>
+            <ul>
+                <li><strong>Habit Creation and Management:</strong> Create unlimited habits with customizable settings, icons, colors, and frequencies</li>
+                <li><strong>Flexible Streak Tracking:</strong> Track your progress with our forgiving streak system that includes buffer days</li>
+                <li><strong>Statistics and Analytics:</strong> View your completion rates, streaks, and progress over time through charts and calendars</li>
+                <li><strong>Reminders:</strong> Set personalized local notifications to stay on track</li>
+                <li><strong>Apple Health Integration:</strong> Optionally connect with Apple Health to auto-complete fitness and wellness habits</li>
+                <li><strong>iCloud Synchronization:</strong> Sync your data across all your Apple devices (optional)</li>
+            </ul>
+            <p>The Service operates on a local-first architecture, meaning your data is primarily stored on your device.</p>
+
+            <hr class="divider">
+
+            <h2>4. User Accounts</h2>
+
+            <h3>4.1 Account Creation</h3>
+            <p>To use certain features of the Service, You may need to sign in using Apple ID. You agree to:</p>
+            <ul>
+                <li>Provide accurate and complete information</li>
+                <li>Maintain the security and confidentiality of Your credentials</li>
+                <li>Notify us immediately of any unauthorized access to Your account</li>
+            </ul>
+
+            <h3>4.2 Account Responsibility</h3>
+            <p>You are solely responsible for:</p>
+            <ul>
+                <li>All activities that occur under Your account</li>
+                <li>Maintaining the confidentiality of Your authentication credentials</li>
+                <li>Any consequences of unauthorized access to Your account</li>
+            </ul>
+
+            <h3>4.3 Age Requirements</h3>
+            <p>You must be at least <strong>13 years old</strong> to use MomentumFlow. If You are between 13 and 17 years old, You represent that Your legal guardian has reviewed and agrees to these Terms.</p>
+            <p>Users under 13 may only use the Application under direct parental supervision.</p>
+
+            <h3>4.4 Account Termination</h3>
+            <p>You may delete Your account at any time by:</p>
+            <ul>
+                <li>Signing out within the Application</li>
+                <li>Deleting the Application from Your device</li>
+                <li>Contacting support to request complete data deletion</li>
+            </ul>
+            <p>We reserve the right to suspend or terminate Your access to the Service if You violate these Terms.</p>
+
+            <hr class="divider">
+
+            <h2>5. Acceptable Use</h2>
+
+            <h3>5.1 Permitted Use</h3>
+            <p>You may use the Service for personal, non-commercial habit tracking purposes in compliance with these Terms and applicable laws.</p>
+
+            <h3>5.2 Prohibited Activities</h3>
+            <p>You agree NOT to:</p>
+            <ul>
+                <li><strong>Illegal Use:</strong> Use the Service for any unlawful purpose or in violation of any applicable laws</li>
+                <li><strong>Unauthorized Access:</strong> Attempt to gain unauthorized access to the Service, other accounts, or computer systems</li>
+                <li><strong>System Disruption:</strong> Interfere with or disrupt the integrity or performance of the Service</li>
+                <li><strong>Malicious Software:</strong> Upload, transmit, or distribute any viruses, malware, or other harmful code</li>
+                <li><strong>Reverse Engineering:</strong> Decompile, reverse engineer, or disassemble the Application</li>
+                <li><strong>Circumvention:</strong> Attempt to bypass any security features or access controls</li>
+                <li><strong>Data Mining:</strong> Use automated systems to extract data from the Service</li>
+                <li><strong>Commercial Exploitation:</strong> Use the Service for commercial purposes without authorization</li>
+                <li><strong>Impersonation:</strong> Impersonate any person or entity, or misrepresent Your affiliation</li>
+                <li><strong>Spam:</strong> Use the Service to send unsolicited communications</li>
+            </ul>
+
+            <h3>5.3 Consequences of Violation</h3>
+            <p>Violation of these rules may result in:</p>
+            <ul>
+                <li>Suspension or termination of Your account</li>
+                <li>Legal action where appropriate</li>
+                <li>Reporting to law enforcement authorities</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>6. User Content</h2>
+
+            <h3>6.1 Ownership</h3>
+            <p>You retain ownership of all User Content You create within the Service, including:</p>
+            <ul>
+                <li>Habit names and descriptions</li>
+                <li>Completion history and notes</li>
+                <li>Custom settings and preferences</li>
+            </ul>
+
+            <h3>6.2 License Grant</h3>
+            <p>By using the Service, You grant us a limited license to:</p>
+            <ul>
+                <li>Store Your User Content on Your device and iCloud (if enabled)</li>
+                <li>Process Your User Content to provide the Service features</li>
+                <li>Create anonymized, aggregated statistics (no personal data)</li>
+            </ul>
+
+            <h3>6.3 Content Guidelines</h3>
+            <p>Your User Content must not:</p>
+            <ul>
+                <li>Violate any laws or regulations</li>
+                <li>Infringe on intellectual property rights of others</li>
+                <li>Contain illegal or harmful content</li>
+            </ul>
+
+            <h3>6.4 Content Responsibility</h3>
+            <p>You are solely responsible for Your User Content. We do not monitor, review, or endorse User Content.</p>
+
+            <hr class="divider">
+
+            <h2>7. Health Data Disclaimer</h2>
+
+            <h3>7.1 Not Medical Advice</h3>
+            <div class="warning">
+                <p>MomentumFlow is a habit tracking tool and <strong>does not provide medical advice</strong>. The Service is not intended to:</p>
+                <ul>
+                    <li>Diagnose, treat, cure, or prevent any disease or health condition</li>
+                    <li>Replace professional medical advice, diagnosis, or treatment</li>
+                    <li>Serve as a substitute for consultation with qualified healthcare providers</li>
+                </ul>
+            </div>
+
+            <h3>7.2 Apple Health Integration</h3>
+            <p>If You enable Apple Health integration:</p>
+            <ul>
+                <li>Health data is used solely to auto-complete relevant habits</li>
+                <li>We do not analyze or interpret Your health data</li>
+                <li>Health insights are based on Apple Health data and are for informational purposes only</li>
+                <li>Always consult healthcare professionals for medical decisions</li>
+            </ul>
+
+            <h3>7.3 Fitness and Wellness</h3>
+            <p>Any fitness, wellness, or health-related habits You track are for personal motivation only. We make no guarantees about health outcomes from using the Service.</p>
+
+            <hr class="divider">
+
+            <h2>8. Streak and Statistics Disclaimer</h2>
+
+            <h3>8.1 For Motivation Only</h3>
+            <p>Streak counts, completion rates, and statistics provided by the Service are:</p>
+            <ul>
+                <li>For motivational and entertainment purposes</li>
+                <li>Based on the data You provide</li>
+                <li>Not guaranteed to be 100% accurate</li>
+            </ul>
+
+            <h3>8.2 No Liability for Progress</h3>
+            <p>We are not responsible for:</p>
+            <ul>
+                <li>Lost streaks due to app errors, device issues, or sync problems</li>
+                <li>Inaccurate statistics from data entry errors</li>
+                <li>Any negative emotions resulting from broken streaks or missed goals</li>
+            </ul>
+
+            <h3>8.3 Flexible Streaks Philosophy</h3>
+            <div class="highlight">
+                <p>Our flexible streak system is designed to encourage progress without perfectionism. Missing a day is part of the journey, not failure.</p>
+            </div>
+
+            <hr class="divider">
+
+            <h2>9. Third-Party Services</h2>
+
+            <h3>9.1 Apple Services</h3>
+            <p>The Service integrates with Apple services including:</p>
+            <ul>
+                <li><strong>Sign in with Apple:</strong> Authentication services</li>
+                <li><strong>iCloud:</strong> Data synchronization</li>
+                <li><strong>Apple Health:</strong> Health data integration</li>
+                <li><strong>Apple Push Notifications:</strong> Local reminders</li>
+            </ul>
+            <p>Your use of these services is subject to Apple's terms and conditions.</p>
+
+            <h3>9.2 Third-Party Links</h3>
+            <p>The Service may contain links to third-party websites or services. We are not responsible for:</p>
+            <ul>
+                <li>Content or practices of third-party sites</li>
+                <li>Privacy policies of third-party services</li>
+                <li>Any loss or damage from using third-party services</li>
+            </ul>
+
+            <h3>9.3 No Endorsement</h3>
+            <p>Reference to any third-party product, service, or company does not constitute our endorsement.</p>
+
+            <hr class="divider">
+
+            <h2>10. Intellectual Property</h2>
+
+            <h3>10.1 Our Property</h3>
+            <p>The Service and its original content (excluding User Content) are and will remain the exclusive property of MomentumFlow. This includes:</p>
+            <ul>
+                <li>Application design and user interface</li>
+                <li>Source code and algorithms</li>
+                <li>Graphics, logos, and icons</li>
+                <li>Text and documentation</li>
+                <li>Trademarks and service marks</li>
+            </ul>
+
+            <h3>10.2 Limited License</h3>
+            <p>We grant You a limited, non-exclusive, non-transferable, revocable license to:</p>
+            <ul>
+                <li>Download and install the Application on Your personal devices</li>
+                <li>Use the Service for personal, non-commercial purposes</li>
+            </ul>
+
+            <h3>10.3 Restrictions</h3>
+            <p>You may not:</p>
+            <ul>
+                <li>Copy, modify, or create derivative works of the Application</li>
+                <li>Distribute, license, or sell the Application</li>
+                <li>Remove any copyright or proprietary notices</li>
+                <li>Use our trademarks without written permission</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>11. Privacy</h2>
+            <p>Your privacy is important to us. Our collection and use of personal information is governed by our <a href="privacy.html">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+            <p>By using the Service, You consent to the collection and use of information as described in our Privacy Policy.</p>
+
+            <hr class="divider">
+
+            <h2>12. Disclaimer of Warranties</h2>
+
+            <h3>12.1 "As Is" Provision</h3>
+            <p class="caps"><strong>THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.</strong></p>
+
+            <h3>12.2 No Warranty</h3>
+            <p>We disclaim all warranties, including but not limited to:</p>
+            <ul>
+                <li>Merchantability and fitness for a particular purpose</li>
+                <li>Non-infringement of third-party rights</li>
+                <li>Uninterrupted, timely, secure, or error-free operation</li>
+                <li>Accuracy or reliability of any content</li>
+                <li>Results from use of the Service</li>
+            </ul>
+
+            <h3>12.3 Use at Your Own Risk</h3>
+            <p>You acknowledge that:</p>
+            <ul>
+                <li>Your use of the Service is at Your sole risk</li>
+                <li>The Service may contain bugs or errors</li>
+                <li>We do not guarantee that the Service will meet Your requirements</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>13. Limitation of Liability</h2>
+
+            <h3>13.1 Liability Cap</h3>
+            <p class="caps"><strong>TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COMPANY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO:</strong></p>
+            <ul>
+                <li>Loss of profits, data, or goodwill</li>
+                <li>Service interruption</li>
+                <li>Computer damage or system failure</li>
+                <li>Personal injury or emotional distress</li>
+            </ul>
+
+            <h3>13.2 Maximum Liability</h3>
+            <p class="caps"><strong>IN NO EVENT SHALL OUR TOTAL LIABILITY EXCEED THE GREATER OF:</strong></p>
+            <ul>
+                <li>$100 USD, or</li>
+                <li>The amount You paid to us in the past twelve (12) months</li>
+            </ul>
+
+            <h3>13.3 Exceptions</h3>
+            <p>The above limitations do not apply to:</p>
+            <ul>
+                <li>Liability arising from gross negligence or willful misconduct</li>
+                <li>Liability that cannot be excluded by applicable law</li>
+                <li>Fraud or fraudulent misrepresentation</li>
+            </ul>
+
+            <h3>13.4 Jurisdictional Limitations</h3>
+            <p>Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability. In such cases, the above limitations may not apply to You.</p>
+
+            <hr class="divider">
+
+            <h2>14. Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless MomentumFlow and its officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from:</p>
+            <ul>
+                <li>Your use of the Service</li>
+                <li>Your violation of these Terms</li>
+                <li>Your violation of any third-party rights</li>
+                <li>Your User Content</li>
+                <li>Any misrepresentation by You</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>15. Changes to Terms</h2>
+
+            <h3>15.1 Right to Modify</h3>
+            <p>We reserve the right to modify these Terms at any time. Changes will be effective when posted.</p>
+
+            <h3>15.2 Notification</h3>
+            <p>We will notify You of significant changes by:</p>
+            <ul>
+                <li>Updating the "Last Updated" date at the top of these Terms</li>
+                <li>Sending a notification through the Application</li>
+                <li>Posting a notice on our website</li>
+            </ul>
+
+            <h3>15.3 Continued Use</h3>
+            <p>Your continued use of the Service after changes constitutes acceptance of the modified Terms. If You do not agree to the changes, You must stop using the Service.</p>
+
+            <hr class="divider">
+
+            <h2>16. General Provisions</h2>
+
+            <h3>16.1 Governing Law</h3>
+            <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which the Company is established, without regard to conflict of law principles.</p>
+
+            <h3>16.2 Dispute Resolution</h3>
+            <p>Any disputes arising from these Terms or the Service shall be resolved through:</p>
+            <ol>
+                <li>Good faith negotiation between the parties</li>
+                <li>Mediation, if negotiation fails</li>
+                <li>Binding arbitration or court proceedings as a last resort</li>
+            </ol>
+
+            <h3>16.3 Severability</h3>
+            <p>If any provision of these Terms is found invalid or unenforceable, the remaining provisions will continue in full force and effect.</p>
+
+            <h3>16.4 Waiver</h3>
+            <p>Failure to enforce any right or provision of these Terms does not constitute a waiver of that right or provision.</p>
+
+            <h3>16.5 Entire Agreement</h3>
+            <p>These Terms, together with the Privacy Policy, constitute the entire agreement between You and the Company regarding the Service.</p>
+
+            <h3>16.6 Assignment</h3>
+            <p>You may not assign or transfer these Terms without our prior written consent. We may assign our rights and obligations without restriction.</p>
+
+            <h3>16.7 Force Majeure</h3>
+            <p>We shall not be liable for any failure or delay in performance due to circumstances beyond our reasonable control, including natural disasters, war, terrorism, labor disputes, or internet failures.</p>
+
+            <hr class="divider">
+
+            <h2>17. Contact Information</h2>
+            <p>If you have questions about these Terms of Service:</p>
+            <p><strong>Email:</strong> <a href="mailto:support@momentumflow.app">support@momentumflow.app</a><br>
+            <strong>In-App:</strong> Settings &rarr; Contact Support</p>
+        </div>
+
+        <!-- Russian Version -->
+        <div id="section-ru" class="section-ru">
+            <h1>Условия Использования</h1>
+            <p class="last-updated"><strong>Последнее обновление:</strong> 19 декабря 2025 года</p>
+
+            <hr class="divider">
+
+            <h2>1. Определения</h2>
+            <p>Для целей настоящих Условий использования:</p>
+            <ul>
+                <li><strong>«Приложение»</strong> означает MomentumFlow, мобильное приложение для отслеживания привычек.</li>
+                <li><strong>«Компания»</strong> (также «мы», «нас» или «наш») означает MomentumFlow.</li>
+                <li><strong>«Контент»</strong> означает любые данные, текст, графику или другие материалы, загружаемые, скачиваемые или отображаемые в Сервисе.</li>
+                <li><strong>«Устройство»</strong> означает любое устройство для использования Приложения: iPhone, iPad или Apple Watch.</li>
+                <li><strong>«Сервис»</strong> означает Приложение и все предоставляемые им функции.</li>
+                <li><strong>«Условия»</strong> означают настоящие Условия использования, составляющие полное соглашение между Вами и Компанией.</li>
+                <li><strong>«Пользователь»</strong> (также «Вы», «Ваш» или «Вам») означает лицо, использующее Приложение.</li>
+                <li><strong>«Пользовательский контент»</strong> означает любой контент, включая данные о привычках, который Вы создаёте или храните с помощью Сервиса.</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>2. Принятие соглашения</h2>
+            <div class="highlight">
+                <p>Загружая, устанавливая или используя MomentumFlow, Вы соглашаетесь соблюдать настоящие Условия использования. Если Вы не согласны с Условиями, не используйте Приложение.</p>
+            </div>
+            <p>Настоящие Условия представляют собой юридически обязывающее соглашение между Вами и Компанией. Используя Сервис, Вы подтверждаете, что:</p>
+            <ul>
+                <li>Вы прочитали и поняли настоящие Условия</li>
+                <li>Вы соглашаетесь соблюдать настоящие Условия</li>
+                <li>Вы дееспособны для заключения обязывающих договоров</li>
+                <li>Вам не запрещено использовать Сервис по закону</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>3. Описание сервиса</h2>
+            <p>MomentumFlow — приложение для отслеживания привычек, помогающее пользователям формировать и поддерживать полезные привычки. Сервис включает:</p>
+            <ul>
+                <li><strong>Создание и управление привычками:</strong> Создание неограниченного количества привычек с настройками, иконками, цветами и частотой</li>
+                <li><strong>Гибкие серии:</strong> Отслеживание прогресса с «прощающей» системой серий, включающей буферные дни</li>
+                <li><strong>Статистика и аналитика:</strong> Просмотр показателей выполнения, серий и прогресса через графики и календари</li>
+                <li><strong>Напоминания:</strong> Настройка персональных локальных уведомлений</li>
+                <li><strong>Интеграция с Apple Health:</strong> Подключение к Apple Health для автоматической отметки фитнес-привычек (опционально)</li>
+                <li><strong>Синхронизация iCloud:</strong> Синхронизация данных между устройствами Apple (опционально)</li>
+            </ul>
+            <p>Сервис работает по принципу «сначала локально»: данные хранятся преимущественно на Вашем устройстве.</p>
+
+            <hr class="divider">
+
+            <h2>4. Учётные записи пользователей</h2>
+
+            <h3>4.1 Создание учётной записи</h3>
+            <p>Для использования некоторых функций Сервиса может потребоваться вход через Apple ID. Вы обязуетесь:</p>
+            <ul>
+                <li>Предоставлять точную и полную информацию</li>
+                <li>Обеспечивать безопасность и конфиденциальность своих учётных данных</li>
+                <li>Немедленно уведомлять нас о несанкционированном доступе</li>
+            </ul>
+
+            <h3>4.2 Ответственность за учётную запись</h3>
+            <p>Вы несёте полную ответственность за:</p>
+            <ul>
+                <li>Все действия, совершаемые под Вашей учётной записью</li>
+                <li>Сохранение конфиденциальности учётных данных</li>
+                <li>Любые последствия несанкционированного доступа к Вашей учётной записи</li>
+            </ul>
+
+            <h3>4.3 Возрастные требования</h3>
+            <p>Вам должно быть не менее <strong>13 лет</strong> для использования MomentumFlow. Если Вам от 13 до 17 лет, Вы подтверждаете, что Ваш законный представитель ознакомился с настоящими Условиями и согласен с ними.</p>
+            <p>Пользователи младше 13 лет могут использовать Приложение только под непосредственным присмотром родителей.</p>
+
+            <h3>4.4 Удаление учётной записи</h3>
+            <p>Вы можете удалить свою учётную запись в любое время:</p>
+            <ul>
+                <li>Выйдя из учётной записи в Приложении</li>
+                <li>Удалив Приложение с устройства</li>
+                <li>Связавшись с поддержкой для полного удаления данных</li>
+            </ul>
+            <p>Мы оставляем за собой право приостановить или прекратить Ваш доступ к Сервису при нарушении настоящих Условий.</p>
+
+            <hr class="divider">
+
+            <h2>5. Допустимое использование</h2>
+
+            <h3>5.1 Разрешённое использование</h3>
+            <p>Вы можете использовать Сервис для личного некоммерческого отслеживания привычек в соответствии с настоящими Условиями и применимым законодательством.</p>
+
+            <h3>5.2 Запрещённые действия</h3>
+            <p>Вы обязуетесь НЕ:</p>
+            <ul>
+                <li><strong>Незаконное использование:</strong> Использовать Сервис в незаконных целях или с нарушением законов</li>
+                <li><strong>Несанкционированный доступ:</strong> Пытаться получить несанкционированный доступ к Сервису, другим учётным записям или системам</li>
+                <li><strong>Нарушение работы системы:</strong> Вмешиваться в работу или нарушать целостность Сервиса</li>
+                <li><strong>Вредоносное ПО:</strong> Загружать, передавать или распространять вирусы или вредоносный код</li>
+                <li><strong>Обратная разработка:</strong> Декомпилировать, осуществлять обратную разработку или дизассемблировать Приложение</li>
+                <li><strong>Обход защиты:</strong> Пытаться обойти функции безопасности или контроля доступа</li>
+                <li><strong>Извлечение данных:</strong> Использовать автоматизированные системы для извлечения данных из Сервиса</li>
+                <li><strong>Коммерческое использование:</strong> Использовать Сервис в коммерческих целях без разрешения</li>
+                <li><strong>Выдача себя за других:</strong> Выдавать себя за другое лицо или искажать свою принадлежность</li>
+                <li><strong>Спам:</strong> Использовать Сервис для рассылки нежелательных сообщений</li>
+            </ul>
+
+            <h3>5.3 Последствия нарушений</h3>
+            <p>Нарушение этих правил может повлечь:</p>
+            <ul>
+                <li>Приостановку или прекращение действия Вашей учётной записи</li>
+                <li>Судебное преследование при необходимости</li>
+                <li>Сообщение в правоохранительные органы</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>6. Пользовательский контент</h2>
+
+            <h3>6.1 Право собственности</h3>
+            <p>Вы сохраняете право собственности на весь Пользовательский контент, создаваемый в Сервисе:</p>
+            <ul>
+                <li>Названия и описания привычек</li>
+                <li>История выполнения и заметки</li>
+                <li>Пользовательские настройки и предпочтения</li>
+            </ul>
+
+            <h3>6.2 Предоставление лицензии</h3>
+            <p>Используя Сервис, Вы предоставляете нам ограниченную лицензию на:</p>
+            <ul>
+                <li>Хранение Пользовательского контента на Вашем устройстве и в iCloud (если включено)</li>
+                <li>Обработку Пользовательского контента для предоставления функций Сервиса</li>
+                <li>Создание анонимной агрегированной статистики (без персональных данных)</li>
+            </ul>
+
+            <h3>6.3 Требования к контенту</h3>
+            <p>Ваш Пользовательский контент не должен:</p>
+            <ul>
+                <li>Нарушать законы или нормативные акты</li>
+                <li>Нарушать права интеллектуальной собственности других лиц</li>
+                <li>Содержать незаконный или вредоносный контент</li>
+            </ul>
+
+            <h3>6.4 Ответственность за контент</h3>
+            <p>Вы несёте полную ответственность за свой Пользовательский контент. Мы не контролируем, не проверяем и не одобряем Пользовательский контент.</p>
+
+            <hr class="divider">
+
+            <h2>7. Отказ от ответственности в отношении здоровья</h2>
+
+            <h3>7.1 Не является медицинской консультацией</h3>
+            <div class="warning">
+                <p>MomentumFlow — инструмент для отслеживания привычек, <strong>не предоставляющий медицинских консультаций</strong>. Сервис не предназначен для:</p>
+                <ul>
+                    <li>Диагностики, лечения или профилактики заболеваний</li>
+                    <li>Замены профессиональной медицинской консультации</li>
+                    <li>Замены консультации с квалифицированными медицинскими специалистами</li>
+                </ul>
+            </div>
+
+            <h3>7.2 Интеграция с Apple Health</h3>
+            <p>При включении интеграции с Apple Health:</p>
+            <ul>
+                <li>Данные здоровья используются только для автоматической отметки привычек</li>
+                <li>Мы не анализируем и не интерпретируем Ваши данные здоровья</li>
+                <li>Информация о здоровье носит справочный характер</li>
+                <li>Всегда консультируйтесь с медицинскими специалистами</li>
+            </ul>
+
+            <h3>7.3 Фитнес и здоровье</h3>
+            <p>Любые привычки, связанные с фитнесом и здоровьем, отслеживаются только для личной мотивации. Мы не гарантируем каких-либо результатов для здоровья от использования Сервиса.</p>
+
+            <hr class="divider">
+
+            <h2>8. Отказ от ответственности за серии и статистику</h2>
+
+            <h3>8.1 Только для мотивации</h3>
+            <p>Счётчики серий, показатели выполнения и статистика Сервиса:</p>
+            <ul>
+                <li>Предназначены для мотивации и развлечения</li>
+                <li>Основаны на данных, которые Вы предоставляете</li>
+                <li>Не гарантированно точны на 100%</li>
+            </ul>
+
+            <h3>8.2 Отсутствие ответственности за прогресс</h3>
+            <p>Мы не несём ответственности за:</p>
+            <ul>
+                <li>Потерю серий из-за ошибок приложения, проблем с устройством или синхронизацией</li>
+                <li>Неточную статистику из-за ошибок ввода данных</li>
+                <li>Негативные эмоции от прерванных серий или недостигнутых целей</li>
+            </ul>
+
+            <h3>8.3 Философия гибких серий</h3>
+            <div class="highlight">
+                <p>Наша система гибких серий создана для поощрения прогресса без перфекционизма. Пропуск дня — часть пути, а не неудача.</p>
+            </div>
+
+            <hr class="divider">
+
+            <h2>9. Сторонние сервисы</h2>
+
+            <h3>9.1 Сервисы Apple</h3>
+            <p>Сервис интегрируется с сервисами Apple:</p>
+            <ul>
+                <li><strong>Вход через Apple:</strong> Услуги аутентификации</li>
+                <li><strong>iCloud:</strong> Синхронизация данных</li>
+                <li><strong>Apple Health:</strong> Интеграция с данными здоровья</li>
+                <li><strong>Push-уведомления Apple:</strong> Локальные напоминания</li>
+            </ul>
+            <p>Использование этих сервисов регулируется условиями Apple.</p>
+
+            <h3>9.2 Ссылки на сторонние ресурсы</h3>
+            <p>Сервис может содержать ссылки на сторонние сайты или сервисы. Мы не несём ответственности за:</p>
+            <ul>
+                <li>Контент или практики сторонних сайтов</li>
+                <li>Политики конфиденциальности сторонних сервисов</li>
+                <li>Любой ущерб от использования сторонних сервисов</li>
+            </ul>
+
+            <h3>9.3 Отсутствие одобрения</h3>
+            <p>Упоминание стороннего продукта или сервиса не является нашим одобрением.</p>
+
+            <hr class="divider">
+
+            <h2>10. Интеллектуальная собственность</h2>
+
+            <h3>10.1 Наша собственность</h3>
+            <p>Сервис и его оригинальный контент (за исключением Пользовательского контента) являются исключительной собственностью MomentumFlow:</p>
+            <ul>
+                <li>Дизайн приложения и интерфейс</li>
+                <li>Исходный код и алгоритмы</li>
+                <li>Графика, логотипы и иконки</li>
+                <li>Тексты и документация</li>
+                <li>Товарные знаки и знаки обслуживания</li>
+            </ul>
+
+            <h3>10.2 Ограниченная лицензия</h3>
+            <p>Мы предоставляем Вам ограниченную, неисключительную, непередаваемую, отзывную лицензию на:</p>
+            <ul>
+                <li>Загрузку и установку Приложения на личные устройства</li>
+                <li>Использование Сервиса в личных некоммерческих целях</li>
+            </ul>
+
+            <h3>10.3 Ограничения</h3>
+            <p>Вы не вправе:</p>
+            <ul>
+                <li>Копировать, изменять или создавать производные произведения Приложения</li>
+                <li>Распространять, лицензировать или продавать Приложение</li>
+                <li>Удалять уведомления об авторских правах</li>
+                <li>Использовать наши товарные знаки без письменного разрешения</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>11. Конфиденциальность</h2>
+            <p>Ваша конфиденциальность важна для нас. Сбор и использование персональной информации регулируется нашей <a href="privacy.html">Политикой конфиденциальности</a>, включённой в настоящие Условия по ссылке.</p>
+            <p>Используя Сервис, Вы соглашаетесь на сбор и использование информации в соответствии с Политикой конфиденциальности.</p>
+
+            <hr class="divider">
+
+            <h2>12. Отказ от гарантий</h2>
+
+            <h3>12.1 Предоставление «как есть»</h3>
+            <p class="caps"><strong>СЕРВИС ПРЕДОСТАВЛЯЕТСЯ НА УСЛОВИЯХ «КАК ЕСТЬ» И «ПО МЕРЕ ДОСТУПНОСТИ» БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ЯВНЫХ ИЛИ ПОДРАЗУМЕВАЕМЫХ.</strong></p>
+
+            <h3>12.2 Отсутствие гарантий</h3>
+            <p>Мы отказываемся от всех гарантий, включая:</p>
+            <ul>
+                <li>Товарной пригодности и соответствия определённой цели</li>
+                <li>Ненарушения прав третьих лиц</li>
+                <li>Бесперебойной, своевременной, безопасной или безошибочной работы</li>
+                <li>Точности или надёжности контента</li>
+                <li>Результатов использования Сервиса</li>
+            </ul>
+
+            <h3>12.3 Использование на свой риск</h3>
+            <p>Вы признаёте, что:</p>
+            <ul>
+                <li>Вы используете Сервис на свой риск</li>
+                <li>Сервис может содержать ошибки</li>
+                <li>Мы не гарантируем соответствие Сервиса Вашим требованиям</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>13. Ограничение ответственности</h2>
+
+            <h3>13.1 Предел ответственности</h3>
+            <p class="caps"><strong>В МАКСИМАЛЬНОЙ СТЕПЕНИ, ДОПУСКАЕМОЙ ЗАКОНОМ, КОМПАНИЯ НЕ НЕСЁТ ОТВЕТСТВЕННОСТИ ЗА КОСВЕННЫЕ, СЛУЧАЙНЫЕ, ОСОБЫЕ, ШТРАФНЫЕ ИЛИ ПОСЛЕДУЮЩИЕ УБЫТКИ, ВКЛЮЧАЯ:</strong></p>
+            <ul>
+                <li>Потерю прибыли, данных или репутации</li>
+                <li>Перерывы в обслуживании</li>
+                <li>Повреждение компьютера или системный сбой</li>
+                <li>Физический или эмоциональный ущерб</li>
+            </ul>
+
+            <h3>13.2 Максимальная ответственность</h3>
+            <p class="caps"><strong>НИ ПРИ КАКИХ ОБСТОЯТЕЛЬСТВАХ НАША ОБЩАЯ ОТВЕТСТВЕННОСТЬ НЕ ПРЕВЫСИТ БОЛЬШЕЙ ИЗ СУММ:</strong></p>
+            <ul>
+                <li>100 долларов США, или</li>
+                <li>Сумма, уплаченная Вами за последние двенадцать (12) месяцев</li>
+            </ul>
+
+            <h3>13.3 Исключения</h3>
+            <p>Вышеуказанные ограничения не применяются к:</p>
+            <ul>
+                <li>Ответственности за грубую небрежность или умышленные действия</li>
+                <li>Ответственности, которую нельзя исключить по закону</li>
+                <li>Мошенничеству или мошенническому введению в заблуждение</li>
+            </ul>
+
+            <h3>13.4 Ограничения юрисдикции</h3>
+            <p>Некоторые юрисдикции не допускают исключение определённых гарантий или ограничение ответственности. В таких случаях вышеуказанные ограничения могут не применяться.</p>
+
+            <hr class="divider">
+
+            <h2>14. Возмещение убытков</h2>
+            <p>Вы соглашаетесь защищать, возмещать убытки и ограждать MomentumFlow, его должностных лиц, директоров, сотрудников и агентов от любых претензий, убытков, потерь, обязательств и расходов (включая судебные издержки), возникающих из:</p>
+            <ul>
+                <li>Вашего использования Сервиса</li>
+                <li>Вашего нарушения настоящих Условий</li>
+                <li>Вашего нарушения прав третьих лиц</li>
+                <li>Вашего Пользовательского контента</li>
+                <li>Любых искажений с Вашей стороны</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>15. Изменение условий</h2>
+
+            <h3>15.1 Право на изменение</h3>
+            <p>Мы оставляем за собой право изменять настоящие Условия в любое время. Изменения вступают в силу с момента публикации.</p>
+
+            <h3>15.2 Уведомление</h3>
+            <p>Мы уведомим Вас о существенных изменениях путём:</p>
+            <ul>
+                <li>Обновления даты «Последнее обновление» вверху документа</li>
+                <li>Отправки уведомления через Приложение</li>
+                <li>Публикации уведомления на нашем сайте</li>
+            </ul>
+
+            <h3>15.3 Продолжение использования</h3>
+            <p>Продолжение использования Сервиса после изменений означает принятие изменённых Условий. Если Вы не согласны с изменениями, прекратите использование Сервиса.</p>
+
+            <hr class="divider">
+
+            <h2>16. Общие положения</h2>
+
+            <h3>16.1 Применимое право</h3>
+            <p>Настоящие Условия регулируются и толкуются в соответствии с законодательством юрисдикции, в которой учреждена Компания, без учёта коллизионных норм.</p>
+
+            <h3>16.2 Разрешение споров</h3>
+            <p>Любые споры, возникающие из настоящих Условий или Сервиса, разрешаются путём:</p>
+            <ol>
+                <li>Добросовестных переговоров между сторонами</li>
+                <li>Медиации при неудаче переговоров</li>
+                <li>Обязательного арбитража или судебного разбирательства в крайнем случае</li>
+            </ol>
+
+            <h3>16.3 Делимость</h3>
+            <p>Если какое-либо положение настоящих Условий признано недействительным или неисполнимым, остальные положения сохраняют полную силу.</p>
+
+            <h3>16.4 Отказ от прав</h3>
+            <p>Неприменение какого-либо права или положения настоящих Условий не означает отказ от этого права или положения.</p>
+
+            <h3>16.5 Полнота соглашения</h3>
+            <p>Настоящие Условия вместе с Политикой конфиденциальности составляют полное соглашение между Вами и Компанией относительно Сервиса.</p>
+
+            <h3>16.6 Уступка прав</h3>
+            <p>Вы не вправе уступать или передавать настоящие Условия без нашего письменного согласия. Мы можем уступать наши права и обязанности без ограничений.</p>
+
+            <h3>16.7 Форс-мажор</h3>
+            <p>Мы не несём ответственности за неисполнение обязательств по обстоятельствам, находящимся вне нашего разумного контроля, включая стихийные бедствия, войны, терроризм, трудовые споры или сбои интернета.</p>
+
+            <hr class="divider">
+
+            <h2>17. Контактная информация</h2>
+            <p>Если у вас есть вопросы о настоящих Условиях использования:</p>
+            <p><strong>Email:</strong> <a href="mailto:support@momentumflow.app">support@momentumflow.app</a><br>
+            <strong>В приложении:</strong> Настройки &rarr; Связаться с поддержкой</p>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 MomentumFlow. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function showEnglish() {
+            document.getElementById('section-en').style.display = 'block';
+            document.getElementById('section-ru').style.display = 'none';
+            document.getElementById('btn-en').classList.add('active');
+            document.getElementById('btn-ru').classList.remove('active');
+        }
+
+        function showRussian() {
+            document.getElementById('section-en').style.display = 'none';
+            document.getElementById('section-ru').style.display = 'block';
+            document.getElementById('btn-en').classList.remove('active');
+            document.getElementById('btn-ru').classList.add('active');
+        }
+    </script>
+</body>
+</html>
