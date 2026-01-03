@@ -76,7 +76,7 @@ export const HABIT_ICON_CATEGORIES: HabitIconCategory[] = [
       { id: 'knife', name: 'Cutlery', category: 'nutrition' },
       { id: 'cake', name: 'Dessert', category: 'nutrition' },
       { id: 'bread', name: 'Bread', category: 'nutrition' },
-      { id: 'apple', name: 'Fruit', category: 'nutrition' },
+      { id: 'fridge', name: 'Refrigerator', category: 'nutrition' },
       { id: 'leaf', name: 'Vegetables', category: 'nutrition' },
       { id: 'seedling', name: 'Healthy Food', category: 'nutrition' },
       { id: 'timer', name: 'Meal Time', category: 'nutrition' },

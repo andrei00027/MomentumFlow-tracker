@@ -1,18 +1,18 @@
-import { useState, useMemo } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, SectionList, RefreshControl } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
-import { useTranslation } from 'react-i18next';
-import { Sizes } from '@/src/constants';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { useHabits } from '@/src/context/HabitsContext';
-import { HabitCard } from '@/src/components/habits/HabitCard';
+import { LoadingSpinner } from '@/src/components/common/LoadingSpinner';
+import { Toast } from '@/src/components/common/Toast';
 import { CreateHabitModal } from '@/src/components/habits/CreateHabitModal';
 import { EditHabitModal } from '@/src/components/habits/EditHabitModal';
 import { HabitActionSheet } from '@/src/components/habits/HabitActionSheet';
-import { LoadingSpinner } from '@/src/components/common/LoadingSpinner';
-import { Toast } from '@/src/components/common/Toast';
+import { HabitCard } from '@/src/components/habits/HabitCard';
+import { Sizes } from '@/src/constants';
+import { useHabits } from '@/src/context/HabitsContext';
+import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { useToast } from '@/src/hooks/useToast';
+import * as Haptics from 'expo-haptics';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { RefreshControl, SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -143,7 +143,6 @@ export default function HomeScreen() {
 
       {habits.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyIcon}>🌊</Text>
           <Text style={styles.emptyTitle}>{t('habits.emptyStateTitle')}</Text>
           <Text style={styles.emptyText}>{t('habits.emptyStateDescription')}</Text>
         </View>
